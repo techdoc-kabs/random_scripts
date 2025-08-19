@@ -72,6 +72,33 @@ def hash_password(password):
 def verify_password(password, hashed):
     return bcrypt.checkpw(password.encode(), hashed.encode())
 
+
+def create_sessions_table():
+    with create_connection() as conn:
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS sessions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id TEXT,
+            role TEXT,
+            name TEXT,
+            event_type TEXT,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            session_duration INTEGER
+        )
+        """)
+create_sessions_table()
+
+
+def insert_session_event(user_id, role, name, event_type, session_duration=None):
+    with create_connection() as conn:
+        conn.execute("""
+            INSERT INTO sessions (user_id, role, name, event_type, timestamp, session_duration)
+            VALUES (?, ?, ?,?, CURRENT_TIMESTAMP, ?)
+        """, (user_id, role, name, event_type, session_duration))
+
+
+
+
 # --- DB Actions ---
 def insert_user(data):
     try:
@@ -106,32 +133,85 @@ def authenticate_user(username, password):
         return True, user["username"], user["role"]
     return False, username, None
 
+# # --- LOGIN DIALOG ---
+# @st.dialog("🔐 Sign In", width='small')
+# def show_login_dialog():
+#     with st.form("login_form"):
+#         username = st.text_input("Username", key="login_usernme")
+#         password = st.text_input("Password", type="password", key="login_password")
+#         submitted = st.form_submit_button(":green[Login]")
+#         if submitted:
+#             success, username, role = authenticate_user(username, password)
+#             if success:
+#                 st.session_state.logged_in = True
+#                 st.session_state.user_name = username
+#                 st.session_state.user_role = role
+#                 st.session_state.show_login = False
+
+#                 with create_connection() as conn:
+#                     row = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+#                     col_names = [desc[0] for desc in conn.execute("PRAGMA table_info(users)")]
+#                 user = dict(zip(col_names, row)) if row else {}
+
+#                 if "notified" not in st.session_state or not st.session_state.notified:
+#                     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#                     pb.push_note(
+#                         "🔔 Login Alert",
+#                         f"User: {user.get('full_name', '')} ({user.get('username')})\n"
+#                         f"Role: {user.get('role')}\n"
+#                         f"Email: {user.get('email', 'N/A')}\n"
+#                         f"Tel: {user.get('contact', 'N/A')}\n"
+#                         f"Date: {now.split()[0]}\n"
+#                         f"Time: {now.split()[1]}"
+#                     )
+#                     st.session_state.notified = True
+
+#                 st.success(f"🎉 Welcome {username}!")
+#                 st.rerun()
+#             else:
+#                 st.error("❌ Invalid email or password.")
+
+#     col1, col2 = st.columns([3, 2])
+#     with col1:
+#         st.markdown(":orange[Don't have an account yet?]")
+#     with col2:
+#         if st.button(":blue[👉 Click to create yours here]", key="to_signup"):
+#             st.session_state.show_login = False
+#             st.session_state.show_signup = True
+#             st.rerun()
 # --- LOGIN DIALOG ---
 @st.dialog("🔐 Sign In", width='small')
 def show_login_dialog():
     with st.form("login_form"):
-        username = st.text_input("Username", key="login_usernme")
-        password = st.text_input("Password", type="password", key="login_password")
+        username_input = st.text_input("Username", key="login_usernme")
+        password_input = st.text_input("Password", type="password", key="login_password")
         submitted = st.form_submit_button(":green[Login]")
+
         if submitted:
-            success, username, role = authenticate_user(username, password)
+            success, username, role = authenticate_user(username_input, password_input)
             if success:
                 st.session_state.logged_in = True
                 st.session_state.user_name = username
                 st.session_state.user_role = role
                 st.session_state.show_login = False
 
+                # Fetch user info properly
                 with create_connection() as conn:
                     row = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
-                    col_names = [desc[0] for desc in conn.execute("PRAGMA table_info(users)")]
-                user = dict(zip(col_names, row)) if row else {}
+                    if row:
+                        # PRAGMA returns a tuple: (cid, name, type, notnull, dflt_value, pk)
+                        col_names = [col[1] for col in conn.execute("PRAGMA table_info(users)")]
+                        user = dict(zip(col_names, row))
+                    else:
+                        user = {}
 
+                # Pushbullet notification
                 if "notified" not in st.session_state or not st.session_state.notified:
                     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     pb.push_note(
                         "🔔 Login Alert",
-                        f"User: {user.get('full_name', '')} ({user.get('username')})\n"
-                        f"Role: {user.get('role')}\n"
+                        f"User: {user.get('full_name', '')} ({user.get('username', '')})\n"
+                        f"Role: {user.get('role', '')}\n"
                         f"Email: {user.get('email', 'N/A')}\n"
                         f"Tel: {user.get('contact', 'N/A')}\n"
                         f"Date: {now.split()[0]}\n"
@@ -142,7 +222,7 @@ def show_login_dialog():
                 st.success(f"🎉 Welcome {username}!")
                 st.rerun()
             else:
-                st.error("❌ Invalid email or password.")
+                st.error("❌ Invalid username or password.")
 
     col1, col2 = st.columns([3, 2])
     with col1:
