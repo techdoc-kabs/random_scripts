@@ -80,49 +80,127 @@ else:
         orientation="horizontal",
         default_index=0,
         styles={
-            "container": {"background-color": "orange", "padding": "0.5rem"},
+            "container": {"background-color": "#1b4f72", "padding": "0.5rem"},
             "nav-link": {"font-size": "16px", "color": "white", "padding": "10px"},
             "nav-link-selected": {"background-color": "green"},
         },
     )
 
 
-# ---- Dark Theme CSS (non-intrusive) ----
 
-# ---- Dark Theme CSS (non-intrusive, preserves background image) ----
+# dark_css = """
+# <style>
+# /* Only color the app container if no custom background image is applied */
+# .stApp:not(.custom-background) {
+#     background-color: #121212;
+#     color: #FFFFFF;
+# }
+
+# /* Sidebar background */
+# [data-testid="stSidebar"] {
+#     background-color: #1E1E1E;
+# }
+
+# /* Inputs and buttons */
+# input, textarea, select, button, .stButton button {
+#     background-color: brown;
+#     color: #FFFFFF;
+#     border-color: #333333;
+# }
+
+# /* Tables */
+# .stDataFrame, .stDataFrame td, .stDataFrame th {
+#     background-color: #1E1E1E;
+#     color: #FFFFFF !important;
+# }
+
+# /* Keep custom cards and images intact */
+# .custom-card, .custom-background {
+#     background-color: unset !important;
+#     color: unset !important;
+# }
+
+# /* Scrollbar styling (optional) */
+# ::-webkit-scrollbar {
+#     width: 10px;
+# }
+# ::-webkit-scrollbar-track {
+#     background: #1E1E1E;
+# }
+# ::-webkit-scrollbar-thumb {
+#     background-color: #333333;
+#     border-radius: 10px;
+# }
+# </style>
+# """
+
+# st.markdown(dark_css, unsafe_allow_html=True)
+
+
+# def set_custom_background(bg_color="skyblue", sidebar_img=None, sidebar_width="200px"):
+#     page_bg_img = f"""
+#         <style>
+#         [data-testid="stAppViewContainer"] > .main {{
+#             background-color: {bg_color if bg_color else "transparent"};
+#             background-size: 140%;
+#             background-position: top left;
+#             background-repeat: repeat;
+#             background-attachment: local;
+#             padding-top: 0px;}}
+#         /* Reduce sidebar width */
+#         section[data-testid="stSidebar"] {{
+#             width: {sidebar_width} !important;
+#             min-width: {sidebar_width} !important;}}
+
+#         [data-testid="stSidebar"] > div:first-child {{
+#             {"background-image: url('data:image/png;base64," + sidebar_img + "');" if sidebar_img else ""}
+#             background-position: center; 
+#             background-repeat: no-repeat;
+#             background-attachment: fixed;
+#             background-size: cover;}}
+
+#         [data-testid="stHeader"] {{
+#             background: rgba(0,0,0,0);
+#             padding-top: 0px;
+#         }}
+
+#         [data-testid="stToolbar"] {{
+#             right: 2rem;
+#         }}
+#         </style>
+#     """
+import streamlit as st
+import base64
+
+# ---------- Dark theme CSS ----------
 dark_css = """
 <style>
-/* Only color the app container if no custom background image is applied */
+/* Only apply dark background where no custom background is set */
 .stApp:not(.custom-background) {
-    background-color: #121212;
-    color: #FFFFFF;
+    background-color: #121212 !important;
+    color: #FFFFFF !important;
 }
 
-/* Sidebar background */
-[data-testid="stSidebar"] {
-    background-color: #1E1E1E;
-}
-
-/* Inputs and buttons */
+/* Inputs, buttons */
 input, textarea, select, button, .stButton button {
-    background-color: brown;
-    color: #FFFFFF;
-    border-color: #333333;
+    background-color: #333333;
+    color: #FFFFFF !important;
+    border-color: #555555 !important;
 }
 
 /* Tables */
 .stDataFrame, .stDataFrame td, .stDataFrame th {
-    background-color: #1E1E1E;
+    background-color: #1E1E1E !important;
     color: #FFFFFF !important;
 }
 
-/* Keep custom cards and images intact */
+/* Custom cards and existing backgrounds remain intact */
 .custom-card, .custom-background {
     background-color: unset !important;
     color: unset !important;
 }
 
-/* Scrollbar styling (optional) */
+/* Scrollbars */
 ::-webkit-scrollbar {
     width: 10px;
 }
@@ -130,48 +208,63 @@ input, textarea, select, button, .stButton button {
     background: #1E1E1E;
 }
 ::-webkit-scrollbar-thumb {
-    background-color: #333333;
+    background-color: #555555;
     border-radius: 10px;
 }
 </style>
 """
-
 st.markdown(dark_css, unsafe_allow_html=True)
 
+# ---------- Background and Sidebar function ----------
+def set_custom_background(bg_color="#121212", sidebar_img_path=None, sidebar_width="200px"):
+    """Set page background color or sidebar image. Leaves custom backgrounds untouched."""
+    sidebar_img_b64 = ""
+    if sidebar_img_path:
+        with open(sidebar_img_path, "rb") as f:
+            sidebar_img_b64 = base64.b64encode(f.read()).decode()
 
-def set_custom_background(bg_color="skyblue", sidebar_img=None, sidebar_width="200px"):
-    page_bg_img = f"""
-        <style>
-        [data-testid="stAppViewContainer"] > .main {{
-            background-color: {bg_color if bg_color else "transparent"};
-            background-size: 140%;
-            background-position: top left;
-            background-repeat: repeat;
-            background-attachment: local;
-            padding-top: 0px;}}
-        /* Reduce sidebar width */
-        section[data-testid="stSidebar"] {{
-            width: {sidebar_width} !important;
-            min-width: {sidebar_width} !important;}}
+    page_bg = f"""
+    <style>
+    /* Main page */
+    .stApp:not(.custom-background) {{
+        background-color: {bg_color} !important;
+    }}
 
-        [data-testid="stSidebar"] > div:first-child {{
-            {"background-image: url('data:image/png;base64," + sidebar_img + "');" if sidebar_img else ""}
-            background-position: center; 
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size: cover;}}
+    /* Sidebar width adjustment */
+    section[data-testid="stSidebar"] {{
+        width: {sidebar_width} !important;
+        min-width: {sidebar_width} !important;
+    }}
 
-        [data-testid="stHeader"] {{
-            background: rgba(0,0,0,0);
-            padding-top: 0px;
-        }}
+    /* Sidebar image */
+    [data-testid="stSidebar"] > div:first-child {{
+        {"background-image: url('data:image/png;base64," + sidebar_img_b64 + "');" if sidebar_img_b64 else ""}
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }}
 
-        [data-testid="stToolbar"] {{
-            right: 2rem;
-        }}
-        </style>
+    /* Header transparent */
+    [data-testid="stHeader"] {{
+        background: rgba(0,0,0,0);
+        padding-top: 0px;
+    }}
+
+    [data-testid="stToolbar"] {{
+        right: 2rem;
+    }}
+    </style>
     """
-    st.markdown(page_bg_img, unsafe_allow_html=True)
+    st.markdown(page_bg, unsafe_allow_html=True)
+
+# Example usage:
+# set_custom_background(bg_color="#121212", sidebar_img_path="sidebar.png", sidebar_width="250px")
+
+
+
+
+
 
 @st.cache_data
 def get_img_as_base64(file):
@@ -181,7 +274,6 @@ def get_img_as_base64(file):
 
 img = get_img_as_base64("images/IMG.webp")
 img2 = get_img_as_base64('images/saved.jpg')
-# set_custom_background(bg_color=None, sidebar_img=img2, sidebar_width='250px')
 
 def footer():
     st.markdown("©PPPS - Uganda. All rights reserved.", unsafe_allow_html=True)
@@ -515,13 +607,6 @@ def get_fisrt_name_from_username(username):
         return username
 
 
-
-
-
-
-
-
-
 def main():
     create_connection()
     set_full_page_background('images/dark_green_back.jpg')
@@ -537,7 +622,11 @@ def main():
 
     auth.create_users_db() 
     if st.session_state.get("logged_in"):
-        set_custom_background(bg_color=None, sidebar_img=img, sidebar_width='400px')
+        # set_custom_background(bg_color=None, sidebar_img=img, sidebar_width='350px')
+        # set_custom_background(bg_color="#121212", sidebar_img_path='images/IMG.webp')
+        set_custom_background(bg_color="#121212", sidebar_img_path='images/IMG.webp', sidebar_width="350px")
+
+        
         first_name = get_fisrt_name_from_username(st.session_state.user_name)
         st.sidebar.success(f"👋 Welcome, {first_name}")
 
