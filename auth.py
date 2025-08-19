@@ -202,6 +202,76 @@ def authenticate_user(username, password):
     return False, username, None
 
 
+# @st.dialog("🔐 Sign In", width='small')
+# def show_login_dialog():
+#     st.markdown(
+#         """
+#         <style>
+#         .tight-label {
+#             color: #1E90FF;
+#             font-weight: 250;
+#             padding: 0px;
+#             margin: 0px;
+#             line-height: 0.5;
+#             display: block;
+#             font-style: Times New Romans;
+#         }
+#         /* Pulls input closer to its label */
+#         .stTextInput > div > div > input {
+#             margin-top: -5px !important;
+#         }
+#         </style>
+#         """,
+#         unsafe_allow_html=True
+#     )
+
+#     with st.form("login_form"):
+#         st.markdown('<span class="tight-label">Username</span>', unsafe_allow_html=True)
+#         username_input = st.text_input("", key="login_username")
+#         st.markdown('<span class="tight-label">Password</span>', unsafe_allow_html=True)
+#         password_input = st.text_input("", type="password", key="login_password")
+#         submitted = st.form_submit_button(":green[Login]")
+#         if submitted:
+#             success, username, role = authenticate_user(username_input, password_input)
+#             if success:
+#                 st.session_state.logged_in = True
+#                 st.session_state.user_name = username
+#                 st.session_state.user_role = role
+#                 st.session_state.show_login = False
+#                 with create_connection() as conn:
+#                     row = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+#                     if row:
+#                         col_names = [col[1] for col in conn.execute("PRAGMA table_info(users)")]
+#                         user = dict(zip(col_names, row))
+#                     else:
+#                         user = {}
+
+#                 if "notified" not in st.session_state or not st.session_state.notified:
+#                     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#                     pb.push_note(
+#                         "🔔 Login Alert",
+#                         f"User: {user.get('full_name', '')} ({user.get('username', '')})\n"
+#                         f"Role: {user.get('role', '')}\n"
+#                         f"Email: {user.get('email', 'N/A')}\n"
+#                         f"Tel: {user.get('contact', 'N/A')}\n"
+#                         f"Date: {now.split()[0]}\n"
+#                         f"Time: {now.split()[1]}"
+#                     )
+#                     st.session_state.notified = True
+#                 st.success(f"🎉 Welcome {username}!")
+#                 st.rerun()
+#             else:
+#                 st.error("❌ Invalid username or password.")
+
+#     col1, col2 = st.columns([3, 2])
+#     with col1:
+#         st.markdown(":orange[Don't have an account yet?]")
+#     with col2:
+#         if st.button(":green[👉 Click to create yours here]", key="to_signup"):
+#             st.session_state.show_login = False
+#             st.session_state.show_signup = True
+#             st.rerun()
+
 @st.dialog("🔐 Sign In", width='small')
 def show_login_dialog():
     st.markdown(
@@ -214,9 +284,8 @@ def show_login_dialog():
             margin: 0px;
             line-height: 0.5;
             display: block;
-            font-style: Times New Romans;
+            font-style: Times New Roman;
         }
-        /* Pulls input closer to its label */
         .stTextInput > div > div > input {
             margin-top: -5px !important;
         }
@@ -231,38 +300,58 @@ def show_login_dialog():
         st.markdown('<span class="tight-label">Password</span>', unsafe_allow_html=True)
         password_input = st.text_input("", type="password", key="login_password")
         submitted = st.form_submit_button(":green[Login]")
+
         if submitted:
-            success, username, role = authenticate_user(username_input, password_input)
+            try:
+                success, username, role = authenticate_user(username_input, password_input)
+            except Exception as e:
+                st.error(f"❌ Login failed due to error: {e}")
+                return
+
             if success:
                 st.session_state.logged_in = True
                 st.session_state.user_name = username
                 st.session_state.user_role = role
                 st.session_state.show_login = False
-                with create_connection() as conn:
-                    row = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
-                    if row:
-                        col_names = [col[1] for col in conn.execute("PRAGMA table_info(users)")]
-                        user = dict(zip(col_names, row))
-                    else:
-                        user = {}
 
+                # Fetch full user info
+                try:
+                    with create_connection() as conn:
+                        row = conn.execute(
+                            "SELECT * FROM users WHERE username = ?", (username,)
+                        ).fetchone()
+                        if row:
+                            col_names = [col[1] for col in conn.execute("PRAGMA table_info(users)")]
+                            user = dict(zip(col_names, row))
+                        else:
+                            user = {}
+                except Exception as e:
+                    user = {}
+                    st.warning(f"⚠️ Could not fetch full user info: {e}")
+
+                # Pushbullet notification safely
                 if "notified" not in st.session_state or not st.session_state.notified:
                     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    pb.push_note(
-                        "🔔 Login Alert",
-                        f"User: {user.get('full_name', '')} ({user.get('username', '')})\n"
-                        f"Role: {user.get('role', '')}\n"
-                        f"Email: {user.get('email', 'N/A')}\n"
-                        f"Tel: {user.get('contact', 'N/A')}\n"
-                        f"Date: {now.split()[0]}\n"
-                        f"Time: {now.split()[1]}"
-                    )
+                    try:
+                        pb.push_note(
+                            "🔔 Login Alert",
+                            f"User: {user.get('full_name', '')} ({user.get('username', '')})\n"
+                            f"Role: {user.get('role', '')}\n"
+                            f"Email: {user.get('email', 'N/A')}\n"
+                            f"Tel: {user.get('contact', 'N/A')}\n"
+                            f"Date: {now.split()[0]}\n"
+                            f"Time: {now.split()[1]}"
+                        )
+                    except Exception as e:
+                        st.warning(f"⚠️ Pushbullet notification failed: {e}")
                     st.session_state.notified = True
+
                 st.success(f"🎉 Welcome {username}!")
                 st.rerun()
             else:
                 st.error("❌ Invalid username or password.")
 
+    # Link to signup outside form
     col1, col2 = st.columns([3, 2])
     with col1:
         st.markdown(":orange[Don't have an account yet?]")
@@ -271,7 +360,6 @@ def show_login_dialog():
             st.session_state.show_login = False
             st.session_state.show_signup = True
             st.rerun()
-
 
 
 
