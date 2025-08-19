@@ -1,0 +1,361 @@
+{
+  "Anxiety": {
+    "image": "images/anxiety.jpeg",
+    "intro": "Anxiety is a common emotional experience for many parents involving excessive worry or fear. Persistent anxiety can affect your ability to care for your children and manage family life.",
+    "symptoms": [
+      "Feeling restless or constantly on edge",
+      "Fatigue and trouble falling asleep due to racing thoughts about family",
+      "Difficulty concentrating on parenting tasks",
+      "Irritability towards family members",
+      "Physical symptoms such as stomach aches or headaches"
+    ],
+    "prevalence": "Many parents experience anxiety, especially when balancing parenting, work, and other responsibilities.",
+    "causes": [
+      "Concerns about children’s health, safety, or development",
+      "Financial stress related to providing for the family",
+      "Relationship or co-parenting conflicts",
+      "Previous personal trauma or mental health issues",
+      "Genetic predisposition"
+    ],
+    "prevention": [
+      "Maintain open and honest communication with your partner and support system",
+      "Learn relaxation techniques such as deep breathing or mindfulness",
+      "Prioritize physical activity and self-care routines",
+      "Set realistic parenting expectations and boundaries",
+      "Limit exposure to stressful situations when possible"
+    ],
+    "management": [
+      "Engage in mindfulness or stress-reduction exercises",
+      "Seek help from mental health professionals specialized in parenting support",
+      "Limit caffeine and screen time, especially before bedtime",
+      "Establish consistent routines for yourself and your children",
+      "Join parent support groups to share experiences and gain perspective"
+    ],
+    "learn_more_link": "https://www.mind.org.uk/information-support/types-of-mental-health-problems/anxiety/",
+    "notes": "Anxiety in parents can impact parenting quality and family harmony. Recognizing symptoms early and seeking support helps both you and your children.",
+    "prevalence_literature": "According to mental health studies, anxiety disorders affect a significant number of parents worldwide."
+  },
+  "Depression": {
+    "image": "images/depression.jpg",
+    "intro": "Depression is a serious mental health condition that affects many parents, impacting their mood, thoughts, and ability to care for their children and household.",
+    "symptoms": [
+      "Persistent feelings of sadness or emptiness",
+      "Loss of interest in activities, including parenting duties",
+      "Feelings of hopelessness or guilt related to parenting",
+      "Changes in appetite or weight",
+      "Thoughts of self-harm or suicide"
+    ],
+    "prevalence": "Parental depression is common and can affect parents at any stage, including postpartum and beyond.",
+    "causes": [
+      "Hormonal changes (especially postpartum)",
+      "Stressful life events related to parenting",
+      "Lack of social support",
+      "Previous history of depression",
+      "Financial or relationship problems"
+    ],
+    "prevention": [
+      "Build a strong social and emotional support network",
+      "Stay physically active and maintain healthy routines",
+      "Use positive coping strategies like journaling or therapy",
+      "Create a nurturing and empathetic home environment",
+      "Avoid isolating yourself from friends and family"
+    ],
+    "management": [
+      "Seek professional counseling or therapy tailored for parents",
+      "Maintain regular sleep, nutrition, and exercise",
+      "Engage in creative activities to express emotions",
+      "Stay connected with trusted loved ones",
+      "Medication may be necessary in some cases"
+    ],
+    "learn_more_link": "https://www.who.int/news-room/fact-sheets/detail/depression",
+    "notes": "Depression can reduce your energy and affect your ability to meet your family’s needs. Early treatment improves outcomes for you and your children.",
+    "prevalence_literature": "The World Health Organization highlights parental depression as a critical issue affecting families globally."
+  },
+  "Stress": {
+    "image": "images/stress.webp",
+    "intro": "Parenting can be stressful, as you juggle childcare, work, finances, and personal well-being. High stress levels can affect your health and family relationships.",
+    "symptoms": [
+      "Frequent headaches or muscle tension",
+      "Sleep disturbances",
+      "Increased irritability or impatience with children",
+      "Feeling overwhelmed or burnt out",
+      "Increased susceptibility to illness"
+    ],
+    "prevalence": "A large proportion of parents report feeling significant stress related to parenting responsibilities.",
+    "causes": [
+      "Balancing work and childcare",
+      "Financial pressures of raising a family",
+      "Marital or co-parenting conflicts",
+      "High expectations of being a 'perfect' parent",
+      "Lack of time for self-care"
+    ],
+    "prevention": [
+      "Develop good time management and ask for help when needed",
+      "Schedule breaks and recreational activities for yourself",
+      "Set realistic goals for parenting and daily tasks",
+      "Maintain open communication with your partner and family",
+      "Seek professional help if stress feels unmanageable"
+    ],
+    "management": [
+      "Practice relaxation methods like meditation or deep breathing",
+      "Talk with trusted friends, family, or therapists",
+      "Maintain physical activity and healthy sleep habits",
+      "Engage in self-care activities regularly",
+      "Avoid multitasking excessively and delegate responsibilities"
+    ],
+    "learn_more_link": "https://www.apa.org/news/press/releases/stress",
+    "notes": "Chronic stress can reduce your patience and emotional availability for your children. Managing stress benefits the whole family.",
+    "prevalence_literature": "Studies indicate many parents face elevated stress levels, especially during challenging times."
+  },
+  "Childhood Trauma": {
+    "image": "images/trama.webp",
+    "intro": "Parents who experienced trauma in their own childhood may face challenges in emotional regulation and parenting, which can impact their family life.",
+    "symptoms": [
+      "Flashbacks or nightmares related to past trauma",
+      "Emotional numbness or detachment",
+      "Difficulty trusting others, including family members",
+      "Anxiety or hypervigilance",
+      "Struggles with forming healthy relationships"
+    ],
+    "prevalence": "Many parents carry childhood trauma that can influence their mental health and parenting style.",
+    "causes": [
+      "Experiences of abuse or neglect",
+      "Exposure to domestic violence",
+      "Loss of caregivers or unstable family environments",
+      "Traumatic events such as accidents or disasters"
+    ],
+    "prevention": [
+      "Seek therapy to process past trauma",
+      "Build safe and stable relationships",
+      "Develop coping skills and emotional regulation",
+      "Increase awareness of trauma’s impact on parenting",
+      "Engage in early interventions to support family health"
+    ],
+    "management": [
+      "Trauma-focused cognitive behavioral therapy (TF-CBT)",
+      "Consistent emotional support from trusted people",
+      "Safe spaces to discuss and process feelings",
+      "Teach and practice emotional regulation skills",
+      "Involve family in healing and recovery processes"
+    ],
+    "learn_more_link": "https://www.nctsn.org/what-is-child-trauma",
+    "notes": "Addressing unresolved childhood trauma can improve your well-being and strengthen your parenting.",
+    "prevalence_literature": "Research shows adverse childhood experiences increase adult mental health risks and parenting difficulties."
+  },
+  "Low Self-Esteem": {
+    "image": "images/esteem.jpg",
+    "intro": "Low self-esteem can affect parents’ confidence and effectiveness in their parenting role, leading to feelings of inadequacy or shame.",
+    "symptoms": [
+      "Frequent self-doubt about parenting decisions",
+      "Fear of failure in family roles",
+      "Negative self-talk",
+      "Avoidance of challenging parenting situations",
+      "Sensitivity to criticism from others"
+    ],
+    "prevalence": "Many parents experience periods of low self-esteem, especially during stressful or transitional times.",
+    "causes": [
+      "Critical upbringing or harsh self-judgment",
+      "Negative feedback from others",
+      "Comparisons with other parents",
+      "Past parenting challenges or setbacks",
+      "Underlying mental health conditions"
+    ],
+    "prevention": [
+      "Practice self-compassion and celebrate parenting successes",
+      "Challenge negative thoughts and beliefs",
+      "Surround yourself with supportive people",
+      "Engage in confidence-building activities",
+      "Seek counseling or parenting coaching if needed"
+    ],
+    "management": [
+      "Use affirmations and gratitude journaling",
+      "Set and celebrate achievable parenting goals",
+      "Pursue hobbies and interests outside parenting",
+      "Join support or mentorship groups for parents",
+      "Learn assertiveness and communication skills"
+    ],
+    "learn_more_link": "https://www.mentalhealth.org.uk/explore-mental-health/a-z-topics/self-esteem",
+    "notes": "Building self-esteem supports emotional health and positive parenting.",
+    "prevalence_literature": "Self-esteem varies but can improve with support and practice."
+  },
+  "Body Shaming & Dysmorphic Disorder": {
+    "image": "images/body.jpg",
+    "intro": "Parents may experience body shaming or develop Body Dysmorphic Disorder (BDD), which involves obsessive concerns about appearance, impacting self-esteem and well-being.",
+    "symptoms": [
+      "Obsessive focus on perceived physical flaws",
+      "Frequent mirror checking",
+      "Avoidance of social or family events",
+      "Distress over minor appearance issues",
+      "Seeking unnecessary cosmetic procedures"
+    ],
+    "prevalence": "BDD affects a small percentage of adults but can have serious consequences if untreated.",
+    "causes": [
+      "Social and cultural pressures",
+      "Negative comments from others",
+      "Media influence",
+      "Family expectations",
+      "Mental health history"
+    ],
+    "prevention": [
+      "Promote self-acceptance and body positivity",
+      "Limit exposure to unrealistic media images",
+      "Educate about digital image manipulation",
+      "Challenge appearance-based negative beliefs",
+      "Seek help if distress increases"
+    ],
+    "management": [
+      "Cognitive behavioral therapy (CBT)",
+      "Media literacy and education",
+      "Reduce mirror checking and avoidance behaviors",
+      "Involve family support",
+      "Medication for severe cases"
+    ],
+    "learn_more_link": "https://www.nhs.uk/mental-health/conditions/body-dysmorphia/",
+    "notes": "Treatment can help reduce distress and improve quality of life.",
+    "prevalence_literature": "BDD often starts in adolescence but can affect parents throughout adulthood."
+  },
+  "Substance Use": {
+    "image": "images/substance.jpg",
+    "intro": "Substance use or misuse can affect parents’ health and their ability to provide stable care for their children.",
+    "symptoms": [
+      "Mood or behavior changes",
+      "Neglect of parenting or household responsibilities",
+      "Secrecy or social withdrawal",
+      "Physical signs like bloodshot eyes or slurred speech",
+      "Tolerance and withdrawal symptoms"
+    ],
+    "prevalence": "Substance misuse affects many adults, including parents, with wide-ranging family impacts.",
+    "causes": [
+      "Stress or trauma",
+      "Family history of addiction",
+      "Poor coping skills",
+      "Social influences",
+      "Lack of support"
+    ],
+    "prevention": [
+      "Educate yourself about substance risks",
+      "Develop healthy coping mechanisms",
+      "Build strong family communication",
+      "Seek support early if struggling",
+      "Maintain supportive social connections"
+    ],
+    "management": [
+      "Professional counseling and rehab programs",
+      "Group therapy and peer support",
+      "Address emotional and psychological issues",
+      "Avoid triggers and risky situations",
+      "Rebuild family trust and support"
+    ],
+    "learn_more_link": "https://www.cdc.gov/healthyyouth/substance-use/index.htm",
+    "notes": "Recovery is possible and benefits both parents and their children.",
+    "prevalence_literature": "Substance misuse is a significant family and public health concern."
+  },
+  "Sleep problems": {
+    "image": "images/sleep_bad.jpg",
+    "intro": "Sleep difficulties in parents, such as insomnia or poor sleep hygiene, can affect mood, health, and caregiving abilities.",
+    "symptoms": [
+      "Trouble falling or staying asleep",
+      "Daytime fatigue",
+      "Mood swings",
+      "Difficulty concentrating",
+      "Frequent night awakenings"
+    ],
+    "prevalence": "Many parents experience disrupted sleep due to parenting demands and stress.",
+    "causes": [
+      "Nighttime caregiving duties",
+      "Stress or anxiety",
+      "Irregular schedules",
+      "Caffeine or substance use",
+      "Underlying mental health conditions"
+    ],
+    "prevention": [
+      "Maintain regular sleep schedules",
+      "Limit screen time before bed",
+      "Avoid caffeine and heavy meals in evening",
+      "Create a relaxing sleep environment",
+      "Practice good sleep hygiene"
+    ],
+    "management": [
+      "Cognitive behavioral therapy for insomnia (CBT-I)",
+      "Establish calming bedtime routines",
+      "Use relaxation exercises",
+      "Manage stress effectively",
+      "Consult healthcare professionals if needed"
+    ],
+    "learn_more_link": "https://sleepfoundation.org/sleep-problems",
+    "notes": "Good sleep supports emotional regulation and effective parenting.",
+    "prevalence_literature": "Studies show disrupted sleep is common among parents, especially with young children."
+  },
+  "Eating problems": {
+    "image": "images/eat.jpg",
+    "intro": "Eating disorders and unhealthy eating behaviors can affect parents’ physical and mental health and their role in family nutrition.",
+    "symptoms": [
+      "Extreme dieting or overeating",
+      "Distorted body image",
+      "Guilt or shame after eating",
+      "Frequent purging or compensatory behaviors",
+      "Preoccupation with weight or appearance"
+    ],
+    "prevalence": "Eating problems affect adults of all ages, including parents.",
+    "causes": [
+      "Perfectionism and stress",
+      "Body dissatisfaction",
+      "Cultural and societal pressures",
+      "History of trauma",
+      "Family dynamics"
+    ],
+    "prevention": [
+      "Promote a balanced, positive relationship with food",
+      "Challenge unrealistic beauty standards",
+      "Educate about nutrition and health",
+      "Build self-esteem and body positivity",
+      "Seek early help if problems arise"
+    ],
+    "management": [
+      "Specialized treatment programs",
+      "Nutritional counseling",
+      "Psychotherapy such as CBT or family therapy",
+      "Medical monitoring",
+      "Family support and involvement"
+    ],
+    "learn_more_link": "https://www.nimh.nih.gov/health/topics/eating-problems",
+    "notes": "Early treatment improves recovery outcomes and family health.",
+    "prevalence_literature": "Eating disorders have high morbidity but can be effectively treated."
+  },
+  "Suicidal behaviors": {
+    "image": "images/suicide.jpg",
+    "intro": "Suicidal thoughts and behaviors are serious and can affect parents facing mental health challenges. Immediate support is critical.",
+    "symptoms": [
+      "Talking about death or expressing hopelessness",
+      "Withdrawing from family and friends",
+      "Extreme mood changes",
+      "Increased substance use",
+      "Giving away possessions or saying goodbye"
+    ],
+    "prevalence": "Suicide is a leading cause of death worldwide, including among parents under stress.",
+    "causes": [
+      "Untreated mental health conditions",
+      "History of trauma or abuse",
+      "Social isolation",
+      "Substance misuse",
+      "Family history of suicide"
+    ],
+    "prevention": [
+      "Early identification and treatment of mental illness",
+      "Strong family and social support",
+      "Reduce access to lethal means",
+      "Encourage open communication about feelings",
+      "Train family and community to recognize warning signs"
+    ],
+    "management": [
+      "Immediate safety planning",
+      "Psychotherapy such as CBT or DBT",
+      "Medication when necessary",
+      "Emergency intervention if risk is imminent",
+      "Ongoing family and professional support"
+    ],
+    "learn_more_link": "https://www.who.int/news-room/fact-sheets/detail/suicide",
+    "notes": "Early intervention saves lives. Support and understanding from family are vital.",
+    "prevalence_literature": "WHO reports hundreds of thousands of suicide deaths each year globally."
+  }
+}

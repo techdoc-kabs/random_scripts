@@ -1,0 +1,117 @@
+{
+  "Relaxation Techniques": {
+    "image": "images/relax.jpg",
+    "description": {
+      "definition": "Relaxation techniques help reduce stress by calming your body and mind. These may include deep breathing, progressive muscle relaxation, and visualization.",
+      "evidence": "Studies show that regular relaxation practices reduce anxiety, improve sleep, and enhance coping in parents managing household and childcare demands (Smith et al., 2021).",
+      "steps": [
+        "Find a quiet moment — even 5 minutes — before or after chores.",
+        "Close your eyes and take a deep breath through your nose.",
+        "Hold it for 3–5 seconds.",
+        "Exhale slowly through your mouth.",
+        "Repeat this for 5–10 minutes daily, especially before difficult conversations with your child."
+      ],
+      "example": "Before confronting her son about skipping school, Sarah from Masaka sat quietly and did deep breathing to calm her nerves and respond more gently."
+    }
+  },
+  "Mindfulness": {
+    "image": "images/mind.jpg",
+    "description": {
+      "definition": "Mindfulness is focusing your full attention on the present moment without judgment. It helps parents respond calmly to children and daily stress.",
+      "evidence": "Mindfulness helps reduce emotional reactivity and improves parenting patience and focus (Kabat-Zinn, 2013).",
+      "steps": [
+        "Sit or stand still, close your eyes if you can.",
+        "Pay close attention to your breathing.",
+        "If your mind wanders to worries or chores, bring it back to the breath.",
+        "Practice for 5 minutes when you wake up or before bed."
+      ],
+      "example": "James from Kampala uses mindfulness in the evening to stay present while helping his children with homework instead of reacting harshly."
+    }
+  },
+  "Positive Attitude": {
+    "image": "images/positve.jpg",
+    "description": {
+      "definition": "Having a positive attitude means choosing to focus on solutions, appreciating small wins, and believing you can handle parenting challenges.",
+      "evidence": "Positive thinking is linked to better mental health, parenting satisfaction, and reduced stress (APA, 2020).",
+      "steps": [
+        "Start the day by saying something hopeful, like 'Today I will do my best.'",
+        "Reframe challenges—'My child is misbehaving' becomes 'My child is struggling and needs support.'",
+        "Surround yourself with positive people.",
+        "Celebrate any small improvement in your child or family."
+      ],
+      "example": "Even after her child was suspended from school, Rose in Fort Portal told herself, 'We will work through this,' and sought counseling for both of them."
+    }
+  },
+  "Sleep Hygiene": {
+    "image": "images/sleep.jpg",
+    "description": {
+      "definition": "Sleep hygiene means developing healthy routines to get enough rest so you can function well during the day as a parent and worker.",
+      "evidence": "Proper sleep is essential for mood, parenting patience, and mental resilience (CDC, 2022).",
+      "steps": [
+        "Go to sleep and wake up at the same time every day.",
+        "Switch off the TV or phone at least 30 minutes before bedtime.",
+        "Keep your sleeping area cool, quiet, and dark.",
+        "Avoid tea, coffee, or soda late in the evening."
+      ],
+      "example": "To stay energized for her job and children, Joan from Gulu stops screen time by 9 PM and follows a sleep routine—even during weekends."
+    }
+  },
+  "Exercising": {
+    "image": "images/exercise.jpg",
+    "description": {
+      "definition": "Exercise includes any physical movement like walking, cleaning, or dancing that boosts mood and reduces stress for busy parents.",
+      "evidence": "Even light daily movement helps parents manage stress and improve their mental health (WHO, 2021).",
+      "steps": [
+        "Choose an activity you enjoy (walking, dancing, stretching).",
+        "Do it for 30 minutes a day — even in short intervals.",
+        "Involve your child or friend to make it fun.",
+        "Stretch before and after."
+      ],
+      "example": "To release tension, Daniel from Arua walks his daughter to school every morning and stretches when he returns home."
+    }
+  },
+  "Interpersonal Relationships": {
+    "image": "images/relation.jpg",
+    "description": {
+      "definition": "Having close, trusting relationships with others helps parents share their burdens, feel supported, and stay emotionally healthy.",
+      "evidence": "Social support improves stress resilience and parenting outcomes (Mental Health Foundation, 2020).",
+      "steps": [
+        "Keep in touch with positive friends or relatives.",
+        "Talk honestly about your challenges.",
+        "Avoid isolation—especially during hard times.",
+        "Seek comfort and wisdom from others without shame."
+      ],
+      "example": "When overwhelmed by her teenage son's behavior, Stella from Lira called her sister to talk and felt lighter after sharing her fears."
+    }
+  },
+  "Seeking Help": {
+    "image": "images/psy3.jpg",
+    "description": {
+      "definition": "Seeking help means reaching out to someone you trust — like a teacher, counselor, elder, or health worker — when parenting or life becomes too much.",
+      "evidence": "Early help-seeking prevents burnout and improves both parent and child outcomes (WHO, 2022).",
+      "steps": [
+        "Notice signs of emotional exhaustion or frustration.",
+        "Identify a trusted person to talk to.",
+        "Be honest about how you’re feeling.",
+        "Accept support or advice without feeling ashamed.",
+        "Reach out again if you need more help later."
+      ],
+      "example": "When he felt like giving up on his rebellious son, Robert from Mbarara spoke to a church counselor who helped him find better ways to connect and discipline."
+    }
+  },
+  "Group therapy": {
+    "image": "images/group.jpg",
+    "description": {
+      "definition": "Group therapy offers parents a safe space to share parenting struggles, learn from others, and receive guidance from professionals.",
+      "evidence": "Parents who attend group therapy report reduced stress, improved parenting skills, and stronger community ties (APA, 2021).",
+      "steps": [
+        "Look for a support group in your community or health center.",
+        "Attend sessions regularly and respectfully.",
+        "Share your experiences and listen to others without judgment.",
+        "Support one another and apply shared strategies at home.",
+        "Use the group’s feedback to improve your parenting journey."
+      ],
+      "example": "In Entebbe, a group of single parents meets monthly at the local church to share parenting tips and challenges, helping each other feel less alone and more capable."
+    }
+  }
+}

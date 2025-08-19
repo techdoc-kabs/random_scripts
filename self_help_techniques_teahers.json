@@ -1,0 +1,117 @@
+{
+  "Relaxation Techniques": {
+    "image": "images/relax.jpg",
+    "description": {
+      "definition": "Relaxation techniques help reduce stress by calming your body and mind. These may include deep breathing, progressive muscle relaxation, and visualization.",
+      "evidence": "Studies show that regular relaxation practices reduce anxiety, improve sleep, and enhance performance in high-pressure professions like teaching (Smith et al., 2021).",
+      "steps": [
+        "Find a quiet moment during or after class to sit comfortably.",
+        "Close your eyes and take a deep breath in through your nose.",
+        "Hold the breath for 3–5 seconds.",
+        "Exhale slowly through your mouth.",
+        "Repeat this for 5–10 minutes daily, especially before stressful meetings or lessons."
+      ],
+      "example": "Before heading to a parent-teacher meeting, Ms. Amina spends 5 minutes doing deep breathing in the staffroom to remain calm and collected."
+    }
+  },
+  "Mindfulness": {
+    "image": "images/mind.jpg",
+    "description": {
+      "definition": "Mindfulness is focusing your full attention on the present moment without judging your thoughts or feelings. It helps teachers remain grounded and respond calmly in challenging classroom situations.",
+      "evidence": "Mindfulness practice among educators has been shown to reduce burnout and improve classroom climate (Kabat-Zinn, 2013).",
+      "steps": [
+        "Sit comfortably at your desk and close your eyes.",
+        "Focus your attention on your breath.",
+        "When your mind wanders to school stress or student behavior, gently bring it back to your breath.",
+        "Practice for 5 minutes before starting your teaching day."
+      ],
+      "example": "Before her first morning class, Mr. James uses mindfulness to reset his focus and prepare for a positive lesson delivery."
+    }
+  },
+  "Positive Attitude": {
+    "image": "images/positve.jpg",
+    "description": {
+      "definition": "Having a positive attitude means choosing to focus on the good in teaching situations and believing in your ability to manage your classroom and guide students.",
+      "evidence": "Educators who practice positive thinking report lower levels of stress and better engagement with their students (APA, 2020).",
+      "steps": [
+        "Start your day with a positive affirmation, like 'I’m making a difference today.'",
+        "Reframe negative thoughts, e.g., 'This student is challenging' becomes 'This student needs more support.'",
+        "Build relationships with encouraging colleagues.",
+        "Celebrate even small classroom successes."
+      ],
+      "example": "After receiving tough feedback from a supervisor, Ms. Rose told herself, 'This is a chance to grow,' and adjusted her lesson plan with optimism."
+    }
+  },
+  "Sleep Hygiene": {
+    "image": "images/sleep.jpg",
+    "description": {
+      "definition": "Sleep hygiene means following habits that help you get quality sleep—essential for teachers managing heavy workloads and long days.",
+      "evidence": "Consistent, quality sleep helps educators improve mood, patience, and decision-making in the classroom (CDC, 2022).",
+      "steps": [
+        "Go to bed and wake up at the same time every day—even during weekends.",
+        "Avoid marking papers or using devices 30 minutes before sleep.",
+        "Ensure your bedroom is quiet and free from classroom distractions.",
+        "Limit caffeine after lunchtime."
+      ],
+      "example": "Mr. John logs off from grading by 9:00 PM and keeps a regular bedtime to stay mentally sharp for morning lessons."
+    }
+  },
+  "Exercising": {
+    "image": "images/exercise.jpg",
+    "description": {
+      "definition": "Exercise includes physical activity like walking or stretching that can help teachers manage emotional and physical stress from long hours.",
+      "evidence": "Exercise supports mental clarity and helps reduce teacher burnout (WHO, 2021).",
+      "steps": [
+        "Choose a fun activity (walking, dancing, stretching).",
+        "Aim for 30 minutes most days, even in short bursts between classes.",
+        "Make it enjoyable — use music or involve colleagues.",
+        "Stretch before and after to stay limber during long teaching days."
+      ],
+      "example": "Every evening after class, Ms. Fiona joins a walking group of teachers from her school to unwind and reconnect."
+    }
+  },
+  "Interpersonal Relationships": {
+    "image": "images/relation.jpg",
+    "description": {
+      "definition": "Healthy relationships with colleagues and family create emotional buffers against teacher stress and isolation.",
+      "evidence": "Educators with strong support networks report less emotional exhaustion and greater job satisfaction (Mental Health Foundation, 2020).",
+      "steps": [
+        "Spend time with supportive colleagues and friends.",
+        "Listen actively and share your challenges with trusted peers.",
+        "Address workplace conflicts respectfully.",
+        "Ask for help — you don’t have to handle it all alone."
+      ],
+      "example": "When workload pressures mount, Maria shares her feelings with a fellow teacher during lunch, and they plan how to support each other through the term."
+    }
+  },
+  "Seeking Help": {
+    "image": "images/psy3.jpg",
+    "description": {
+      "definition": "Seeking help means recognizing when you're emotionally overwhelmed and reaching out to a counselor, school leader, or trusted colleague.",
+      "evidence": "Teachers who seek support early manage classroom stress more effectively and maintain mental well-being (WHO, 2022).",
+      "steps": [
+        "Notice signs of burnout or emotional exhaustion.",
+        "Identify someone you trust in your school or community.",
+        "Talk openly about your struggles.",
+        "Be open to resources and support offered.",
+        "Follow up if needed—self-care is ongoing."
+      ],
+      "example": "When Mr. Peter began losing sleep from stress, he talked to the school counselor, who helped him create a better work-life balance."
+    }
+  },
+  "Group therapy": {
+    "image": "images/group.jpg",
+    "description": {
+      "definition": "Group therapy offers a space for teachers to share experiences, support one another, and learn coping strategies under professional guidance.",
+      "evidence": "Group therapy reduces burnout and feelings of isolation among educators and provides a sense of community (APA, 2021).",
+      "steps": [
+        "Find a support group for teachers or educators.",
+        "Agree on ground rules for sharing and confidentiality.",
+        "Participate actively — both speaking and listening.",
+        "Support peers while receiving guidance yourself.",
+        "Reflect on feedback to improve your teaching-life balance."
+      ],
+      "example": "A local group of teachers meets every two weeks after school to discuss stress and share coping strategies, leaving members more confident and less alone in their struggles."
+    }
+  }
+}

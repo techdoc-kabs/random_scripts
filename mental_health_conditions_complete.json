@@ -1,0 +1,363 @@
+{
+  "Anxiety": {
+    "image": "images/anxiety.jpeg",
+    "intro": "Anxiety is a common emotional experience involving excessive fear or worry. While some anxiety is normal, persistent and overwhelming anxiety can interfere with school, relationships, and daily life.",
+    "symptoms": [
+      "Restlessness or feeling on edge",
+      "Fatigue and trouble sleeping",
+      "Difficulty concentrating",
+      "Irritability",
+      "Physical symptoms like stomach aches or headaches"
+    ],
+    "prevalence": "Anxiety problems affect an estimated 7\u201310% of school-aged children worldwide, and rates have increased post-COVID.",
+    "causes": [
+      "Academic pressure",
+      "Social challenges or bullying",
+      "Family conflict",
+      "Previous trauma",
+      "Genetic predisposition"
+    ],
+    "prevention": [
+      "Promote open communication at home and school",
+      "Teach relaxation techniques (e.g., deep breathing)",
+      "Encourage physical activity and healthy routines",
+      "Create supportive academic environments",
+      "Reduce exposure to stressful situations when possible"
+    ],
+    "management": [
+      "Practice mindfulness and stress-reduction exercises",
+      "Talk to a school counselor or mental health professional",
+      "Limit caffeine and screen time before bed",
+      "Keep a daily routine and sleep schedule",
+      "Join support groups or peer mentoring programs"
+    ],
+    "learn_more_link": "https://www.mind.org.uk/information-support/types-of-mental-health-problems/anxiety/",
+    "notes": "Anxiety can manifest in students as test anxiety, social anxiety, or general anxiety about the future. For example, a student may avoid presentations due to fear of being judged.",
+    "prevalence_literature": "According to the National Institute of Mental Health, anxiety problems are the most common mental illness in the U.S., affecting 31.9% of adolescents aged 13\u201318."
+  },
+  "Depression": {
+    "image": "images/depression.jpg",
+    "intro": "Depression is more than just feeling sad or moody. It's a serious mental health condition that affects how someone feels, thinks, and acts, leading to problems in daily functioning.",
+    "symptoms": [
+      "Persistent sadness or low mood",
+      "Loss of interest in activities",
+      "Feelings of hopelessness or worthlessness",
+      "Changes in appetite or weight",
+      "Suicidal thoughts"
+    ],
+    "prevalence": "Depression affects around 1 in 5 adolescents globally and is one of the leading causes of disability in young people.",
+    "causes": [
+      "Genetic factors",
+      "Negative thinking patterns",
+      "Stressful life events",
+      "Loneliness or isolation",
+      "Hormonal changes during adolescence"
+    ],
+    "prevention": [
+      "Build strong social and emotional skills",
+      "Encourage regular physical activity",
+      "Teach positive coping strategies",
+      "Promote a culture of support and empathy",
+      "Limit negative media influences"
+    ],
+    "management": [
+      "Seek professional counseling or therapy",
+      "Maintain regular sleep, meals, and exercise",
+      "Use journaling or art to express emotions",
+      "Stay connected with trusted friends or mentors",
+      "Medication may be prescribed in severe cases"
+    ],
+    "learn_more_link": "https://www.who.int/news-room/fact-sheets/detail/depression",
+    "notes": "A depressed student may struggle to get out of bed, lose interest in friends or activities, and perform poorly in school. For instance, consistent low mood over weeks may indicate clinical depression.",
+    "prevalence_literature": "The World Health Organization states that depression is the fourth leading cause of illness and disability among adolescents aged 15\u201319 years."
+  },
+  "Stress": {
+    "image": "images/stress.webp",
+    "intro": "Stress is the body's response to pressure or threat. School stress in students often comes from academic demands, social challenges, and extracurricular expectations.",
+    "symptoms": [
+      "Headaches or muscle tension",
+      "Sleep problems",
+      "Irritability",
+      "Feeling overwhelmed",
+      "Frequent illness"
+    ],
+    "prevalence": "Up to 75% of students report feeling stressed about schoolwork or exams.",
+    "causes": [
+      "Exams and academic deadlines",
+      "Lack of time management",
+      "Social issues",
+      "Parental expectations",
+      "Unhealthy coping habits"
+    ],
+    "prevention": [
+      "Teach time management and study skills",
+      "Encourage breaks and recreational activities",
+      "Reduce unrealistic academic pressures",
+      "Create a balanced schedule",
+      "Foster a safe and open environment to discuss concerns"
+    ],
+    "management": [
+      "Use breathing and relaxation techniques",
+      "Talk to a teacher, parent, or counselor",
+      "Get regular physical activity and sleep",
+      "Practice mindfulness and self-care",
+      "Limit multitasking and overcommitment"
+    ],
+    "learn_more_link": "https://www.apa.org/news/press/releases/stress",
+    "notes": "Stress in students often arises before major exams or when juggling academics with extracurriculars. Chronic stress can reduce academic performance and emotional resilience.",
+    "prevalence_literature": "Surveys by the American Psychological Association report that 45% of teens say they are stressed by school pressures."
+  },
+  "Childhood Trauma": {
+    "image": "images/trama.webp",
+    "intro": "Childhood trauma involves exposure to events such as abuse, neglect, or family violence, which can severely impact emotional development and mental health.",
+    "symptoms": [
+      "Flashbacks or nightmares",
+      "Emotional numbness",
+      "Trust issues",
+      "Anxiety or hypervigilance",
+      "Difficulty in relationships"
+    ],
+    "prevalence": "Approximately 1 in 4 children experience a traumatic event by age 16.",
+    "causes": [
+      "Physical or emotional abuse",
+      "Sexual abuse",
+      "Domestic violence",
+      "Loss of a loved one",
+      "Neglect or abandonment"
+    ],
+    "prevention": [
+      "Create safe, stable, and nurturing relationships",
+      "Raise awareness about child abuse and neglect",
+      "Support parents and caregivers through education",
+      "Establish clear safety protocols at schools",
+      "Encourage early intervention in high-risk families"
+    ],
+    "management": [
+      "Trauma-focused cognitive behavioral therapy (TF-CBT)",
+      "Build trust through consistent support",
+      "Safe space to talk about experiences",
+      "Teach emotional regulation skills",
+      "Involve caregivers in the healing process"
+    ],
+    "learn_more_link": "https://www.nctsn.org/what-is-child-trauma",
+    "notes": "Examples of trauma include witnessing domestic violence, losing a parent, or surviving an accident. Such experiences can disrupt emotional development and behavior in school.",
+    "prevalence_literature": "The CDC-Kaiser ACE study found that 61% of adults had at least one adverse childhood experience (ACE), which increases the risk of future mental health issues."
+  },
+  "Low Self-Esteem": {
+    "image": "images/esteem.jpg",
+    "intro": "Low self-esteem is a negative perception of oneself and often leads to feelings of inadequacy, shame, or lack of confidence.",
+    "symptoms": [
+      "Self-doubt",
+      "Fear of failure",
+      "Negative self-talk",
+      "Avoidance of challenges",
+      "Sensitivity to criticism"
+    ],
+    "prevalence": "Many adolescents experience dips in self-esteem, especially during transitional periods such as puberty.",
+    "causes": [
+      "Critical parenting",
+      "Bullying",
+      "Academic struggles",
+      "Media comparison",
+      "Social rejection"
+    ],
+    "prevention": [
+      "Celebrate small achievements",
+      "Encourage self-expression and individuality",
+      "Avoid criticism and comparison",
+      "Model positive self-talk",
+      "Build strong, positive relationships"
+    ],
+    "management": [
+      "Use affirmations and gratitude journals",
+      "Set realistic goals and track progress",
+      "Encourage hobbies and passions",
+      "Counseling or mentorship programs",
+      "Teach assertiveness and communication skills"
+    ],
+    "learn_more_link": "https://www.mentalhealth.org.uk/explore-mental-health/a-z-topics/self-esteem",
+    "notes": "A student may constantly criticize themselves or avoid leadership roles due to fear of failure. Affirmation exercises and supportive environments can improve self-worth.",
+    "prevalence_literature": "Research shows that self-esteem typically drops during early adolescence due to puberty and social comparison but can recover with proper support."
+  },
+  "Body Shaming & Dysmorphic Disorder": {
+    "image": "images/body.jpg",
+    "intro": "Body shaming involves criticizing someone's physical appearance and can lead to Body Dysmorphic Disorder (BDD), where a person is obsessed with perceived flaws.",
+    "symptoms": [
+      "Obsessive focus on appearance",
+      "Frequent checking in mirrors",
+      "Avoiding social situations",
+      "Severe distress over minor flaws",
+      "Seeking unnecessary cosmetic procedures"
+    ],
+    "prevalence": "BDD affects about 2% of adolescents, often going undiagnosed due to stigma.",
+    "causes": [
+      "Peer pressure",
+      "Social media exposure",
+      "Bullying",
+      "Family expectations",
+      "Mental health history"
+    ],
+    "prevention": [
+      "Promote body positivity and diversity",
+      "Limit social media that promotes unrealistic standards",
+      "Educate about digital image manipulation",
+      "Encourage self-acceptance",
+      "Challenge appearance-based bullying"
+    ],
+    "management": [
+      "Cognitive behavioral therapy (CBT)",
+      "Media literacy education",
+      "Limit mirror-checking and avoidance behaviors",
+      "Involve family in treatment",
+      "Medication may be used for severe cases"
+    ],
+    "learn_more_link": "https://www.nhs.uk/mental-health/conditions/body-dysmorphia/",
+    "notes": "A teenager who constantly compares themselves to influencers may feel ashamed of their appearance. This can escalate to body dysmorphia, affecting self-image and mental health.",
+    "prevalence_literature": "The International OCD Foundation notes that BDD affects about 1.7% to 2.9% of the general population, with onset usually in adolescence."
+  },
+  "Substance Use": {
+    "image": "images/substance.jpg",
+    "intro": "Substance use  involves the harmful or hazardous use of drugs or alcohol. It can affect academic performance and increase the risk of mental health problems.",
+    "symptoms": [
+      "Changes in behavior or mood",
+      "Neglecting responsibilities",
+      "Secrecy or isolation",
+      "Physical signs like red eyes or slurred speech",
+      "Tolerance and withdrawal symptoms"
+    ],
+    "prevalence": "Around 5% of adolescents globally report substance misuse, often starting in high school.",
+    "causes": [
+      "Peer pressure",
+      "Family history of addiction",
+      "Poor coping skills",
+      "Stress or trauma",
+      "Lack of supervision"
+    ],
+    "prevention": [
+      "Educate early about risks of drug use",
+      "Promote healthy coping strategies",
+      "Strengthen refusal skills and assertiveness",
+      "Foster open family communication",
+      "Monitor and supervise adolescent activities"
+    ],
+    "management": [
+      "Seek professional help from counselors or rehab programs",
+      "Participate in group therapy or 12-step programs",
+      "Address underlying emotional or psychological issues",
+      "Avoid triggers and risky environments",
+      "Rebuild trust and family support"
+    ],
+    "learn_more_link": "https://www.cdc.gov/healthyyouth/substance-use/index.htm",
+    "notes": "Teen substance use often begins with experimentation at social events but may progress to regular use, especially when used to cope with emotional pain.",
+    "prevalence_literature": "UNODC data shows that 5.6% of 15\u201316-year-olds reported using cannabis at least once in the past year."
+  },
+  "Sleep problems": {
+    "image": "images/sleep_bad.jpg",
+    "intro": "Sleep problems in students can include insomnia, delayed sleep phase syndrome, and poor sleep hygiene. These conditions affect concentration, mood, and academic success.",
+    "symptoms": [
+      "Difficulty falling or staying asleep",
+      "Daytime sleepiness",
+      "Mood swings",
+      "Poor memory or focus",
+      "Frequent waking during the night"
+    ],
+    "prevalence": "Approximately 30\u201340% of adolescents suffer from sleep disturbances.",
+    "causes": [
+      "Excess screen time",
+      "Academic stress",
+      "Irregular schedules",
+      "Caffeine intake",
+      "Mental health issues"
+    ],
+    "prevention": [
+      "Stick to a consistent sleep schedule",
+      "Limit screen use before bedtime",
+      "Avoid caffeine in the evening",
+      "Create a quiet and dark sleep environment",
+      "Educate about the importance of sleep hygiene"
+    ],
+    "management": [
+      "Cognitive behavioral therapy for insomnia (CBT-I)",
+      "Establish bedtime routines",
+      "Use relaxation exercises before bed",
+      "Reduce stress through daily planning",
+      "Consult a sleep specialist if persistent"
+    ],
+    "learn_more_link": "https://sleepfoundation.org/sleep-problems",
+    "notes": "Students may stay up late due to device use, affecting sleep quality. This leads to fatigue and concentration issues in class, commonly seen in teens with delayed sleep phase syndrome.",
+    "prevalence_literature": "The Sleep Foundation reports that 70% of high school students do not get enough sleep on school nights."
+  },
+  "Eating problems": {
+    "image": "images/eat.jpg",
+    "intro": "Eating problems such as anorexia, bulimia, and binge-eating disorder involve unhealthy eating habits that negatively affect physical and mental health.",
+    "symptoms": [
+      "Extreme restriction or overeating",
+      "Distorted body image",
+      "Guilt after eating",
+      "Frequent dieting or purging",
+      "Obsession with weight or shape"
+    ],
+    "prevalence": "Eating problems affect around 5% of adolescents, with many cases emerging during teenage years.",
+    "causes": [
+      "Perfectionism",
+      "Body image dissatisfaction",
+      "Cultural ideals",
+      "Trauma",
+      "Family influence"
+    ],
+    "prevention": [
+      "Promote healthy relationships with food and body",
+      "Challenge societal beauty norms",
+      "Educate about nutrition and health",
+      "Encourage media literacy",
+      "Support positive self-esteem"
+    ],
+    "management": [
+      "Seek treatment from specialists in eating problems",
+      "Nutritional counseling and meal planning",
+      "Psychotherapy such as CBT or family-based therapy",
+      "Medical monitoring for physical complications",
+      "Support from family and peer groups"
+    ],
+    "learn_more_link": "https://www.nimh.nih.gov/health/topics/eating-problems",
+    "notes": "Teens might skip meals or over-exercise to meet body ideals portrayed in media. These behaviors often go unnoticed until severe health issues arise.",
+    "prevalence_literature": "NIMH reports that eating problems have the highest mortality rate of any mental disorder, with peak onset during adolescence."
+  },
+  "Suicidal behaviors": {
+  "image": "images/suicide.jpg",
+  "intro": "Suicidal behaviors refer to thoughts, plans, or actions intended to cause one's own death. These behaviors are often linked to mental health conditions such as depression, anxiety, trauma, or substance use.",
+  "symptoms": [
+    "Talking about wanting to die or feeling hopeless",
+    "Withdrawing from friends or activities",
+    "Extreme mood swings",
+    "Increased use of alcohol or drugs",
+    "Giving away prized possessions or saying goodbye"
+  ],
+  "prevalence": "Globally, suicide is the fourth leading cause of death among 15–29-year-olds. In many countries, adolescent suicide rates have been rising.",
+  "causes": [
+    "Untreated mental health conditions",
+    "History of trauma or abuse",
+    "Bullying or social isolation",
+    "Substance misuse",
+    "Family history of suicide"
+  ],
+  "prevention": [
+    "Early identification and treatment of mental health issues",
+    "Strong social support systems",
+    "Reducing access to means (e.g., firearms, medications)",
+    "Promoting open conversations about mental health",
+    "Training school staff to recognize warning signs"
+  ],
+  "management": [
+    "Immediate safety planning and risk assessment",
+    "Psychotherapy such as Cognitive Behavioral Therapy (CBT) or Dialectical Behavior Therapy (DBT)",
+    "Medication for underlying mental health conditions",
+    "Emergency intervention if the person is in immediate danger",
+    "Family and school-based support and follow-up"
+  ],
+  "learn_more_link": "https://www.who.int/news-room/fact-sheets/detail/suicide",
+  "notes": "Many suicidal individuals show warning signs. Early intervention and support can be life-saving. Encouraging young people to talk about their feelings without judgment is critical.",
+  "prevalence_literature": "According to the World Health Organization, more than 700,000 people die by suicide every year. Adolescents and young adults are particularly vulnerable."
+}
+
+}

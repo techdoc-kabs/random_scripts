@@ -1,0 +1,122 @@
+{
+  "Relaxation Techniques": {
+    "image": "images/relax.jpg",
+    "description": {
+      "definition": "Relaxation techniques help reduce stress by calming your body and mind. These may include deep breathing, progressive muscle relaxation, and visualization.",
+      "evidence": "Studies show that regular relaxation practices reduce anxiety, improve sleep, and enhance academic performance (Smith et al., 2021).",
+      "steps": [
+        "Find a quiet and comfortable place to sit.",
+        "Close your eyes and take a deep breath in through your nose.",
+        "Hold the breath for 3–5 seconds.",
+        "Exhale slowly through your mouth.",
+        "Repeat this for 5–10 minutes daily."
+      ],
+      "example": "Before her exams, Amina spends 5 minutes deep breathing behind the classroom to stay calm."
+    }
+  },
+  "Mindfulness": {
+    "image": "images/mind.jpg",
+    "description": {
+      "definition": "Mindfulness is focusing your full attention on the present moment without judging your thoughts or feelings.",
+      "evidence": "Mindfulness training has been linked to reduced stress and better concentration among students (Kabat-Zinn, 2013).",
+      "steps": [
+        "Sit comfortably and close your eyes.",
+        "Pay attention to your breathing.",
+        "When your mind wanders, gently bring it back to your breath.",
+        "Try to do this for 5 minutes every morning."
+      ],
+      "example": "James uses mindfulness before class presentations to feel focused and confident."
+    }
+  },
+  "Positive Attitude": {
+    "image": "images/positve.jpg",
+    "description": {
+      "definition": "Having a positive attitude means choosing to focus on the good in situations and believing in your ability to overcome challenges.",
+      "evidence": "Positive thinking is associated with lower stress levels and better emotional health (APA, 2020).",
+      "steps": [
+        "Start your day with a positive affirmation.",
+        "Replace negative thoughts with hopeful ones.",
+        "Surround yourself with encouraging people.",
+        "Celebrate small achievements daily."
+      ],
+      "example": "Even after failing a test, Rose told herself, 'I’ll do better next time' and studied with a friend."
+    }
+  },
+  "Sleep Hygiene": {
+    "image": "images/sleep.jpg",
+    "description": {
+      "definition": "Sleep hygiene means following good habits that help you sleep well each night.",
+      "evidence": "Good sleep improves memory, mood, and academic performance (CDC, 2022).",
+      "steps": [
+        "Go to bed and wake up at the same time every day.",
+        "Avoid screens (phones/TV) 30 minutes before bed.",
+        "Make your sleeping area quiet and dark.",
+        "Avoid caffeine in the evening."
+      ],
+      "example": "John stops using his phone at 9:00 PM and sleeps by 10:00 to wake up fresh for school."
+    }
+  },
+  "Exercising": {
+    "image": "images/exercise.jpg",
+    "description": {
+      "definition": "Exercise is any physical activity that gets your body moving, like walking, dancing, or playing sports.",
+      "evidence": "Regular exercise reduces depression and anxiety, and boosts self-esteem (WHO, 2021).",
+      "steps": [
+        "Choose an activity you enjoy (walking, dancing, sports).",
+        "Do it for at least 30 minutes most days.",
+        "Make it fun – invite a friend or play music.",
+        "Stretch before and after to avoid injury."
+      ],
+      "example": "Fiona jogs every evening with her friend to clear her mind and feel better."
+    }
+  },
+  "Interpersonal Relationships": {
+    "image": "images/relation.jpg",
+    "description": {
+      "definition": "Building healthy relationships means forming supportive connections with friends, family, and mentors.",
+      "evidence": "Strong social support reduces stress and improves well-being among students (Mental Health Foundation, 2020).",
+      "steps": [
+        "Spend time with positive people.",
+        "Be a good listener and show empathy.",
+        "Resolve conflicts respectfully.",
+        "Ask for help when you need it."
+      ],
+      "example": "Maria talks to her sister when she feels overwhelmed with school work."
+    }
+  },
+  "Seeking Help": {
+    "image": "images/psy3.jpg",
+    "description": {
+      "definition": "Seeking help means reaching out to someone you trust — like a teacher, counselor, or friend — when you’re struggling.",
+      "evidence": "Early help-seeking improves mental health outcomes and prevents problems from worsening (WHO, 2022).",
+      "steps": [
+        "Recognize when you're feeling overwhelmed.",
+        "Think of someone you trust.",
+        "Share your feelings honestly.",
+        "Accept support and suggestions.",
+        "Follow up if you need more help."
+      ],
+      "example": "When he felt too anxious to attend school, Peter spoke to his teacher who connected him with the counselor."
+    }
+  },
+
+ "Group therapy": {
+  "image": "images/group.jpg",
+  "description": {
+    "definition": "Group therapy is a form of psychotherapy where a small group of individuals meet regularly under the guidance of a trained therapist to share experiences, offer support, and work through challenges together.",
+    "evidence": "Research shows that group therapy can be as effective as individual therapy for many mental health conditions. It helps reduce feelings of isolation and builds social support (APA, 2021).",
+    "steps": [
+      "Join a group led by a qualified therapist.",
+      "Agree on confidentiality and group rules.",
+      "Participate by sharing and listening actively.",
+      "Support others and receive support in return.",
+      "Reflect on feedback and apply insights to daily life."
+    ],
+    "example": "A group of teens meets weekly to discuss anxiety and stress management strategies. By sharing openly and supporting each other, members feel less alone and more empowered to cope."
+  }
+}
+
+
+
+
+}
