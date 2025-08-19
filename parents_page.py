@@ -842,6 +842,107 @@ def save_appointment(client_name, client_email, client_phone, therapist_name, th
     conn.close()
 
 
+def book_appointment():
+    create_appointment_requests_table()
+    if "show_appointment_form" not in st.session_state:
+        st.session_state.show_appointment_form = False
+
+    conn = create_connection()
+    therapist_list = fetch_all_therapists(conn)
+
+    st.markdown("""
+        <style>
+        div.stButton > button {
+            background-color: #00897b;
+            color: white !important;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        div.stButton > button:hover {
+            background-color: #e53935;
+            color: white !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    if st.button("🗓️ Request for an appointment"):
+        st.session_state.show_appointment_form = not st.session_state.show_appointment_form
+    if st.session_state.show_appointment_form:
+        set_full_page_background('images/black_strip.jpg')
+        with st.form("appointment_form"):
+            col1, col2 = st.columns(2)
+            name = col1.text_input(":orange[Full Name]", value=st.session_state.name)
+            email = col1.text_input(":orange[Email Address]", value=st.session_state.user_email)
+            tel = col1.text_input(":orange[Telephone]", value=st.session_state.contact)
+            therapist_display_names = [t["display"] for t in therapist_list]
+            if "Any Available" not in therapist_display_names:
+                therapist_display_names.insert(0, "Any Available")  # add at top
+
+            selected_display = col2.selectbox('Prefer to speak to:', therapist_display_names)
+            if selected_display == "Any Available":
+                selected_therapist_name = "Any Available"
+                selected_therapist_email = "any@available.com"  # placeholder
+            else:
+                selected_therapist = next(t for t in therapist_list if t["display"] == selected_display)
+                selected_therapist_name = selected_therapist["full_name"]
+                selected_therapist_email = selected_therapist["email"]
+
+            date = col2.date_input(":orange[Preferred Date]")
+            time = col2.time_input(":orange[Preferred Time]")
+            reason = st.text_area(":orange[Reason for Appointment]", height=100)
+            submitted = st.form_submit_button("✅ Submit Appointment")
+
+            if submitted:
+                if name.strip() and email.strip() and reason.strip():
+                    save_appointment(
+                        client_name=name,
+                        client_email=email,
+                        client_phone=tel,
+                        therapist_name=selected_therapist_name,
+                        therapist_email=selected_therapist_email,
+                        appointment_date=date,
+                        appointment_time=time,
+                        reason=reason
+                    )
+                    send_email_notification(
+                        client_email=email,
+                        therapist_email=selected_therapist_email,
+                        therapist_name=selected_therapist_name,
+                        client_name=name,
+                        date=date,
+                        time=time,
+                        reason=reason,
+                        client_phone=tel
+                    )
+                    st.success(f"✅ Appointment booked with {selected_display} on {date} at {time}")
+                    import time as t
+                    t.sleep(3)
+                    st.session_state.show_appointment_form = False
+                    st.rerun()
+                else:
+                    st.warning("⚠️ Please fill in all required fields.")
+import threading
+import streamlit as st
+import time as t
+
+def send_notifications_async(client_email, therapist_email, therapist_name, client_name, date, time, reason, client_phone):
+    """Send emails and SMS in a background thread"""
+    thread = threading.Thread(
+        target=send_email_notification,
+        args=(client_email, therapist_email, therapist_name, client_name, date, time, reason, client_phone)
+    )
+    thread.start()
+# # Initialize session state defaults
+# for key in ["name", "user_email", "contact"]:
+#     if key not in st.session_state:
+#         st.session_state[key] = ""
+
 # def book_appointment():
 #     create_appointment_requests_table()
 #     if "show_appointment_form" not in st.session_state:
@@ -873,6 +974,7 @@ def save_appointment(client_name, client_email, client_phone, therapist_name, th
 
 #     if st.button("🗓️ Request for an appointment"):
 #         st.session_state.show_appointment_form = not st.session_state.show_appointment_form
+
 #     if st.session_state.show_appointment_form:
 #         set_full_page_background('images/black_strip.jpg')
 #         with st.form("appointment_form"):
@@ -880,11 +982,14 @@ def save_appointment(client_name, client_email, client_phone, therapist_name, th
 #             name = col1.text_input(":orange[Full Name]", value=st.session_state.name)
 #             email = col1.text_input(":orange[Email Address]", value=st.session_state.user_email)
 #             tel = col1.text_input(":orange[Telephone]", value=st.session_state.contact)
+
+#             # Build therapist selectbox
 #             therapist_display_names = [t["display"] for t in therapist_list]
 #             if "Any Available" not in therapist_display_names:
-#                 therapist_display_names.insert(0, "Any Available")  # add at top
+#                 therapist_display_names.insert(0, "Any Available")  # add top option
 
 #             selected_display = col2.selectbox('Prefer to speak to:', therapist_display_names)
+
 #             if selected_display == "Any Available":
 #                 selected_therapist_name = "Any Available"
 #                 selected_therapist_email = "any@available.com"  # placeholder
@@ -900,6 +1005,110 @@ def save_appointment(client_name, client_email, client_phone, therapist_name, th
 
 #             if submitted:
 #                 if name.strip() and email.strip() and reason.strip():
+#                     # Save appointment immediately
+#                     save_appointment(
+#                         client_name=name,
+#                         client_email=email,
+#                         client_phone=tel,
+#                         therapist_name=selected_therapist_name,
+#                         therapist_email=selected_therapist_email,
+#                         appointment_date=date,
+#                         appointment_time=time,
+#                         reason=reason)
+#                     send_notifications_async(
+#                         client_email=email,
+#                         therapist_email=selected_therapist_email,
+#                         therapist_name=selected_therapist_name,
+#                         client_name=name,
+#                         date=date,
+#                         time=time,
+#                         reason=reason,
+#                         client_phone=tel
+#                     )
+
+#                     st.success(f"✅ Appointment booked with {selected_display} on {date} at {time}")
+#                     t.sleep(1)
+#                     st.session_state.show_appointment_form = False
+#                     st.rerun()
+#                 else:
+#                     st.warning("⚠️ Please fill in all required fields.")
+
+# def book_appointment():
+#     create_appointment_requests_table()
+#     if "show_appointment_form" not in st.session_state:
+#         st.session_state.show_appointment_form = False
+
+#     # Initialize session_state fields safely
+#     for key in ["name", "user_email", "contact", "reason", "selected_display", "date", "time"]:
+#         if key not in st.session_state:
+#             st.session_state[key] = ""
+
+#     conn = create_connection()
+#     therapist_list = fetch_all_therapists(conn)
+
+#     st.markdown("""
+#         <style>
+#         div.stButton > button {
+#             background-color: #00897b;
+#             color: white !important;
+#             padding: 12px 28px;
+#             border-radius: 25px;
+#             font-size: 16px;
+#             font-weight: bold;
+#             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+#             transition: all 0.3s ease;
+#             border: none;
+#             cursor: pointer;
+#         }
+#         div.stButton > button:hover {
+#             background-color: #e53935;
+#             color: white !important;
+#         }
+#         </style>
+#     """, unsafe_allow_html=True)
+
+#     if st.button("🗓️ Request for an appointment"):
+#         st.session_state.show_appointment_form = not st.session_state.show_appointment_form
+
+#     if st.session_state.show_appointment_form:
+#         set_full_page_background('images/black_strip.jpg')
+#         with st.form("appointment_form"):
+#             col1, col2 = st.columns(2)
+            
+#             # Bind inputs directly to session_state to preserve user input
+#             name = col1.text_input(":orange[Full Name]", value=st.session_state.name, key="name")
+#             email = col1.text_input(":orange[Email Address]", value=st.session_state.user_email, key="user_email")
+#             tel = col1.text_input(":orange[Telephone]", value=st.session_state.contact, key="contact")
+
+#             therapist_display_names = [t["display"] for t in therapist_list]
+#             if "Any Available" not in therapist_display_names:
+#                 therapist_display_names.insert(0, "Any Available")
+
+#             selected_display = col2.selectbox(
+#                 'Prefer to speak to:', 
+#                 therapist_display_names, 
+#                 index=therapist_display_names.index(st.session_state.selected_display) 
+#                       if st.session_state.selected_display in therapist_display_names else 0,
+#                 key="selected_display"
+#             )
+
+#             if selected_display == "Any Available":
+#                 selected_therapist_name = "Any Available"
+#                 selected_therapist_email = "any@available.com"
+#             else:
+#                 selected_therapist = next(t for t in therapist_list if t["display"] == selected_display)
+#                 selected_therapist_name = selected_therapist["full_name"]
+#                 selected_therapist_email = selected_therapist["email"]
+
+#             date = col2.date_input(":orange[Preferred Date]", value=st.session_state.date or datetime.today(), key="date")
+#             time = col2.time_input(":orange[Preferred Time]", value=st.session_state.time or datetime.now().time(), key="time")
+#             reason = st.text_area(":orange[Reason for Appointment]", value=st.session_state.reason, height=100, key="reason")
+
+#             submitted = st.form_submit_button("✅ Submit Appointment")
+
+#             if submitted:
+#                 if name.strip() and email.strip() and reason.strip():
+#                     # Save appointment
 #                     save_appointment(
 #                         client_name=name,
 #                         client_email=email,
@@ -910,7 +1119,7 @@ def save_appointment(client_name, client_email, client_phone, therapist_name, th
 #                         appointment_time=time,
 #                         reason=reason
 #                     )
-#                     send_email_notification(
+#                     send_notifications_async(
 #                         client_email=email,
 #                         therapist_email=selected_therapist_email,
 #                         therapist_name=selected_therapist_name,
@@ -920,9 +1129,9 @@ def save_appointment(client_name, client_email, client_phone, therapist_name, th
 #                         reason=reason,
 #                         client_phone=tel
 #                     )
+
 #                     st.success(f"✅ Appointment booked with {selected_display} on {date} at {time}")
-#                     import time as t
-#                     t.sleep(3)
+#                     t.sleep(1)
 #                     st.session_state.show_appointment_form = False
 #                     st.rerun()
 #                 else:
@@ -941,6 +1150,7 @@ def send_notifications_async(client_email, therapist_email, therapist_name, clie
 
 def book_appointment():
     create_appointment_requests_table()
+    
     if "show_appointment_form" not in st.session_state:
         st.session_state.show_appointment_form = False
 
@@ -975,11 +1185,22 @@ def book_appointment():
         set_full_page_background('images/black_strip.jpg')
         with st.form("appointment_form"):
             col1, col2 = st.columns(2)
-            name = col1.text_input(":orange[Full Name]", value=st.session_state.name)
-            email = col1.text_input(":orange[Email Address]", value=st.session_state.user_email)
-            tel = col1.text_input(":orange[Telephone]", value=st.session_state.contact)
 
-            # Build therapist selectbox
+            # Safe auto-fill from session_state
+            name = col1.text_input(
+                ":orange[Full Name]", 
+                value=st.session_state["name"] if "name" in st.session_state else ""
+            )
+            email = col1.text_input(
+                ":orange[Email Address]", 
+                value=st.session_state["user_email"] if "user_email" in st.session_state else ""
+            )
+            tel = col1.text_input(
+                ":orange[Telephone]", 
+                value=st.session_state["contact"] if "contact" in st.session_state else ""
+            )
+
+            # Therapist selectbox
             therapist_display_names = [t["display"] for t in therapist_list]
             if "Any Available" not in therapist_display_names:
                 therapist_display_names.insert(0, "Any Available")  # add top option
@@ -990,18 +1211,25 @@ def book_appointment():
                 selected_therapist_name = "Any Available"
                 selected_therapist_email = "any@available.com"  # placeholder
             else:
-                selected_therapist = next(t for t in therapist_list if t["display"] == selected_display)
-                selected_therapist_name = selected_therapist["full_name"]
-                selected_therapist_email = selected_therapist["email"]
+                # Safe retrieval to avoid StopIteration
+                selected_therapist = next(
+                    (t for t in therapist_list if t["display"] == selected_display),
+                    None
+                )
+                if selected_therapist:
+                    selected_therapist_name = selected_therapist["full_name"]
+                    selected_therapist_email = selected_therapist["email"]
+                else:
+                    selected_therapist_name = selected_display
+                    selected_therapist_email = "any@available.com"
 
             date = col2.date_input(":orange[Preferred Date]")
-            time = col2.time_input(":orange[Preferred Time]")
+            time_input = col2.time_input(":orange[Preferred Time]")
             reason = st.text_area(":orange[Reason for Appointment]", height=100)
             submitted = st.form_submit_button("✅ Submit Appointment")
 
             if submitted:
                 if name.strip() and email.strip() and reason.strip():
-                    # Save appointment immediately
                     save_appointment(
                         client_name=name,
                         client_email=email,
@@ -1009,26 +1237,26 @@ def book_appointment():
                         therapist_name=selected_therapist_name,
                         therapist_email=selected_therapist_email,
                         appointment_date=date,
-                        appointment_time=time,
-                        reason=reason)
+                        appointment_time=time_input,
+                        reason=reason
+                    )
                     send_notifications_async(
                         client_email=email,
                         therapist_email=selected_therapist_email,
                         therapist_name=selected_therapist_name,
                         client_name=name,
                         date=date,
-                        time=time,
+                        time=time_input,
                         reason=reason,
                         client_phone=tel
                     )
 
-                    st.success(f"✅ Appointment booked with {selected_display} on {date} at {time}")
+                    st.success(f"✅ Appointment booked with {selected_display} on {date} at {time_input}")
                     t.sleep(1)
                     st.session_state.show_appointment_form = False
                     st.rerun()
                 else:
                     st.warning("⚠️ Please fill in all required fields.")
-
 
 
 ###### DRIVER CODE #########
