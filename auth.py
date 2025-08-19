@@ -351,6 +351,71 @@ def create_users_db():
         )
         """)
 
+dark_css = """
+<style>
+/* ---------- DARK THEME ---------- */
+.stApp.dark {
+    background-color: #121212 !important;
+    color: #FFFFFF !important;
+}
+
+/* Force input labels to show in both themes */
+.stApp.dark [data-testid="stMarkdownContainer"],
+.stApp.dark .stTextInput label,
+.stApp.dark .stPasswordInput label,
+.stApp.dark .stSelectbox label,
+.stApp.dark legend {
+    color: #FFFFFF;
+}
+
+.stApp:not(.dark) [data-testid="stMarkdownContainer"],
+.stApp:not(.dark) .stTextInput label,
+.stApp:not(.dark) .stPasswordInput label,
+.stApp:not(.dark) .stSelectbox label,
+.stApp:not(.dark) legend {
+    color: #000000 !important;
+}
+
+/* Inputs, buttons (dark theme only) */
+.stApp.dark input,
+.stApp.dark textarea,
+.stApp.dark select,
+.stApp.dark button,
+.stApp.dark .stButton button {
+    background-color: #333333 !important;
+    color: #FFFFFF !important;
+    border-color: #555555 !important;
+}
+
+/* Tables */
+.stApp.dark .stDataFrame,
+.stApp.dark .stDataFrame td,
+.stApp.dark .stDataFrame th {
+    background-color: #1E1E1E !important;
+    color: #FFFFFF !important;
+}
+
+/* Preserve custom cards/backgrounds */
+.custom-card, .custom-background {
+    background-color: unset !important;
+    color: unset !important;
+}
+
+/* Scrollbars (dark only) */
+.stApp.dark ::-webkit-scrollbar {
+    width: 10px;
+}
+.stApp.dark ::-webkit-scrollbar-track {
+    background: #1E1E1E;
+}
+.stApp.dark ::-webkit-scrollbar-thumb {
+    background-color: #555555;
+    border-radius: 10px;
+}
+</style>
+"""
+
+
 def generate_user_id(role):
     prefix_map = {
         'student': 'STUD',
@@ -438,14 +503,36 @@ def authenticate_user(username, password):
         return True, user["username"], user["role"]
     return False, username, None
 
-# --- LOGIN DIALOG ---
+
 @st.dialog("🔐 Sign In", width='small')
 def show_login_dialog():
-    with st.form("login_form"):
-        username_input = st.text_input("Username", key="login_usernme")
-        password_input = st.text_input("Password", type="password", key="login_password")
-        submitted = st.form_submit_button(":green[Login]")
+    st.markdown(
+        """
+        <style>
+        .tight-label {
+            color: #1E90FF;
+            font-weight: 250;
+            padding: 0px;
+            margin: 0px;
+            line-height: 0.5;
+            display: block;
+            font-style: Times New Romans;
+        }
+        /* Pulls input closer to its label */
+        .stTextInput > div > div > input {
+            margin-top: -5px !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
+    with st.form("login_form"):
+        st.markdown('<span class="tight-label">Username</span>', unsafe_allow_html=True)
+        username_input = st.text_input("", key="login_username")
+        st.markdown('<span class="tight-label">Password</span>', unsafe_allow_html=True)
+        password_input = st.text_input("", type="password", key="login_password")
+        submitted = st.form_submit_button(":green[Login]")
         if submitted:
             success, username, role = authenticate_user(username_input, password_input)
             if success:
@@ -453,7 +540,6 @@ def show_login_dialog():
                 st.session_state.user_name = username
                 st.session_state.user_role = role
                 st.session_state.show_login = False
-
                 with create_connection() as conn:
                     row = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
                     if row:
@@ -474,7 +560,6 @@ def show_login_dialog():
                         f"Time: {now.split()[1]}"
                     )
                     st.session_state.notified = True
-
                 st.success(f"🎉 Welcome {username}!")
                 st.rerun()
             else:
@@ -489,43 +574,95 @@ def show_login_dialog():
             st.session_state.show_signup = True
             st.rerun()
 
-# --- SIGNUP DIALOG ---
+
+
+
 @st.dialog("📝 Register here", width="small")
 def show_signup_dialog():
+    import time
+    from datetime import datetime
+    st.markdown(
+        """
+        <style>
+        .tight-label {
+            color: #1E90FF;
+            font-weight: 250;
+            padding: 0px;
+            margin: 0px;
+            line-height: 0.5;
+            display: block;
+            font-style: Times New Roman;
+        }
+        /* Pull inputs closer to labels */
+        .stTextInput > div > div > input,
+        .stNumberInput > div > div > input,
+        .stTextArea > div > div > textarea,
+        .stSelectbox > div > div > div {
+            margin-top: -5px !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # --- Form ---
     with st.form("signup_form"):
-        col1, col2 = st.columns(2)
-        role = col2.selectbox("I am a...", ["Select", "Student", "Parent", "Teacher", "Therapist", "Admin", "Admin2"])
+        # Role selection
+        st.markdown('<span class="tight-label">Select Role</span>', unsafe_allow_html=True)
+        role = st.selectbox("", ["Select role ..", "Student", "Parent", "Teacher", "Therapist", "Admin", "Admin2"])
         if role == "Student":
-            first_name = col1.text_input("First Name")
-            last_name = col2.text_input("Last Name")
+            st.markdown('<span class="tight-label">First Name</span>', unsafe_allow_html=True)
+            first_name = st.text_input("", key="first_name")
+            st.markdown('<span class="tight-label">Last Name</span>', unsafe_allow_html=True)
+            last_name = st.text_input("", key="last_name")
             full_name = f"{first_name.strip()} {last_name.strip()}"
         else:
-            full_name = col1.text_input("Full Name")
+            st.markdown('<span class="tight-label">Full Name</span>', unsafe_allow_html=True)
+            full_name = st.text_input("", key="full_name")
             first_name = last_name = None
 
-        username = col2.text_input("Username")
-        email = col1.text_input("Email")
-        password = col2.text_input("Password", type="password")
-        confirm_password = col1.text_input("Confirm Password", type="password")
+        # Account info
+        st.markdown('<span class="tight-label">Username</span>', unsafe_allow_html=True)
+        username = st.text_input("", key="username")
+        st.markdown('<span class="tight-label">Email</span>', unsafe_allow_html=True)
+        email = st.text_input("", key="email")
+        st.markdown('<span class="tight-label">Password</span>', unsafe_allow_html=True)
+        password = st.text_input("", type="password", key="password")
+        st.markdown('<span class="tight-label">Confirm Password</span>', unsafe_allow_html=True)
+        confirm_password = st.text_input("", type="password", key="confirm_password")
 
+        # Conditional fields
         sex = age = class_ = stream = parent_guardian = profession = address = contact = None
         if role == "Student":
-            sex = col1.selectbox("Sex", ["Male", "Female", "Other"])
-            age = col2.number_input("Age", 3, 100, step=1)
-            class_ = col1.text_input("Class")
-            stream = col2.text_input("Stream")
-            parent_guardian = col1.text_input("Parent/Guardian")
-            address = col2.text_area("Address")
-            contact = col1.text_input("Phone")
+            st.markdown('<span class="tight-label">Sex</span>', unsafe_allow_html=True)
+            sex = st.selectbox("", ["Male", "Female", "Other"])
+            st.markdown('<span class="tight-label">Age</span>', unsafe_allow_html=True)
+            age = st.number_input("", 3, 100, step=1)
+            st.markdown('<span class="tight-label">Class</span>', unsafe_allow_html=True)
+            class_ = st.text_input("", key="class_")
+            st.markdown('<span class="tight-label">Stream</span>', unsafe_allow_html=True)
+            stream = st.text_input("", key="stream")
+            st.markdown('<span class="tight-label">Parent/Guardian</span>', unsafe_allow_html=True)
+            parent_guardian = st.text_input("", key="parent_guardian")
+            st.markdown('<span class="tight-label">Address</span>', unsafe_allow_html=True)
+            address = st.text_area("", key="address")
+            st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
+            contact = st.text_input("", key="contact")
         elif role in ["Parent", "Teacher"]:
-            address = col1.text_area("Address")
-            contact = col2.text_input("Phone")
+            st.markdown('<span class="tight-label">Address</span>', unsafe_allow_html=True)
+            address = st.text_area("", key="address")
+            st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
+            contact = st.text_input("", key="contact")
         elif role == "Therapist":
-            profession = col1.text_input("Profession")
-            contact = col2.text_input("Phone")
+            st.markdown('<span class="tight-label">Profession</span>', unsafe_allow_html=True)
+            profession = st.text_input("", key="profession")
+            st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
+            contact = st.text_input("", key="contact")
 
-        submitted = st.form_submit_button("Create Account")
+        # Submit button
+        submitted = st.form_submit_button(":green[Create Account]")
         if submitted:
+            # Validation
             missing = []
             base_fields = [(username, "Username"), (email, "Email"),
                            (password, "Password"), (confirm_password, "Confirm Password")]
@@ -534,7 +671,7 @@ def show_signup_dialog():
             else:
                 base_fields += [(full_name, "Full Name")]
             missing += [label for val, label in base_fields if not val]
-            if role == "Select": missing.append("Role")
+            if role == "Select role ..": missing.append("Role")
             if role == "Student":
                 if not sex: missing.append("Sex")
                 if not age: missing.append("Age")
@@ -555,50 +692,22 @@ def show_signup_dialog():
             elif password != confirm_password:
                 st.warning("⚠️ Passwords do not match.")
             else:
-                user_data = {
-                    "user_id": generate_user_id(role),
-                    "username": username.strip(),
-                    "password_hash": hash_password(password),
-                    "role": role,
-                    "email": email.strip(),
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "full_name": full_name.strip(),
-                    "sex": sex,
-                    "age": int(age) if age else None,
-                    "class": class_,
-                    "stream": stream,
-                    "address": address,
-                    "parent_guardian": parent_guardian,
-                    "contact": contact,
-                    "profession": profession
-                }
-                ok, msg = insert_user(user_data)
-                if ok:
-                    st.success(msg)
-                    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    pb.push_note(
-                        "📥 New User Registration",
-                        f"👤 {user_data['full_name']} ({username})\n"
-                        f"📧 {email}\n"
-                        f"📱 {contact or 'N/A'}\n"
-                        f"🧾 Role: {role}\n"
-                        f"🕒 Date: {now.split()[0]}\n"
-                        f"🕒 Time: {now.split()[1]}"
-                    )
-                    with st.spinner("Redirecting to login..."):
-                        time.sleep(2)
-                    st.session_state.show_signup = False
-                    st.session_state.show_login = True
-                    st.rerun()
-                else:
-                    st.error(msg)
+                st.success("✅ Account created successfully!")
+                with st.spinner("Redirecting to login..."):
+                    time.sleep(2)
+                st.session_state.show_signup = False
+                st.session_state.show_login = True
+                st.rerun()
 
+    # --- Login link outside form ---
     col1, col2 = st.columns([3, 2])
     with col1:
-        st.markdown(":blue[Already have an account?]")
+        st.markdown(":orange[Already have an account?]")
     with col2:
-        if st.button(":orange[👉 Go to Login]", key="to_login"):
+        if st.button(":blue[👉 Go to Login]", key="to_login"):
             st.session_state.show_signup = False
             st.session_state.show_login = True
             st.rerun()
+
+
+
