@@ -26,7 +26,7 @@ def fetch_users(db, search_input):
     cursor = db.cursor()
     if search_input.strip().upper().startswith("STUD-") or search_input.isdigit():
         query = """
-        SELECT user_id, full_name, age, gender, class, stream
+        SELECT user_id, full_name, age, sex, class, stream
         FROM users
         WHERE user_id = ?
         """
@@ -45,7 +45,7 @@ def fetch_users(db, search_input):
             query_conditions.append("full_name LIKE ?")
             params.append(f"%{search_input}%")
         query = f"""
-        SELECT user_id, full_name, age, gender, class, stream
+        SELECT user_id, full_name, age, sex, class, stream
         FROM users
         WHERE {" OR ".join(query_conditions)}
         """
@@ -217,7 +217,7 @@ def main():
             ("Student ID", selected_record['user_id']),
             ("Name", selected_record['full_name']),
             ("Age", f"{selected_record['age']} Years"),
-            ("Gender", selected_record['gender']),
+            ("Gender", selected_record['sex']),
             ("Class", selected_record['class']),
             ("Stream", selected_record['stream']),
         ]

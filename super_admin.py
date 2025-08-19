@@ -13,15 +13,70 @@ def create_connection():
     db.row_factory = sqlite3.Row
     return db
 
-st.markdown("""
-    <style>
-    .stButton button {
-        border-radius: 6px;
-        padding: 0.25rem 0.75rem;
-        font-size: 0.9rem;
-    }
-    </style>
-""", unsafe_allow_html=True)
+# st.markdown("""
+#     <style>
+#     .stButton button {
+#         border-radius: 6px;
+#         padding: 0.25rem 0.75rem;
+#         font-size: 0.9rem;
+#     }
+#     </style>
+# """, unsafe_allow_html=True)
+
+
+
+
+
+
+
+
+dark_css = """
+<style>
+/* Only apply dark background where no custom background is set */
+.stApp:not(.custom-background) {
+    background-color: #121212 !important;
+    color: #FFFFFF !important;
+}
+
+/* Inputs, buttons */
+input, textarea, select, button, .stButton button {
+    background-color: brown;
+    color: orange;
+    border-color: #555555 !important;
+}
+
+/* Tables */
+.stDataFrame, .stDataFrame td, .stDataFrame th {
+    background-color: #1E1E1E !important;
+    color: #FFFFFF !important;
+}
+
+/* Custom cards and existing backgrounds remain intact */
+.custom-card, .custom-background {
+    background-color: unset !important;
+    color: unset !important;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #1E1E1E;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #555555;
+    border-radius: 10px;
+}
+</style>
+"""
+st.markdown(dark_css, unsafe_allow_html=True)
+
+
+
+
+
+
 def get_all_users():
     db = create_connection()
     cursor = db.cursor()

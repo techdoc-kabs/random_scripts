@@ -299,119 +299,119 @@ def insert_appointment(appointment_data):
     finally:
         conn.close()
 
-def view_appointments(therapist_name: str):
-    df = view_appointment_requests(therapist_name)
-    if df.empty:
-        st.info(f"No appointments found for {therapist_name}.")
-        return
-    df["appointment_date"] = pd.to_datetime(df["appointment_date"])
-    df["response_date"] = pd.to_datetime(df.get("response_date"), errors='coerce')
-    with st.sidebar.expander('📅 Filter Appointments by Date', expanded=True):
-        all_years = sorted(df["appointment_date"].dt.year.unique(), reverse=True)
-        selected_years = st.multiselect("Select Year(s)", options=all_years, default=all_years)
-        df_filtered = df[df["appointment_date"].dt.year.isin(selected_years)]
-        available_months = sorted(df_filtered["appointment_date"].dt.month.unique())
-        month_names = [calendar.month_name[m] for m in available_months]
-        selected_month_names = st.multiselect("Select Month(s)", options=month_names, default=month_names)
-        selected_months = [list(calendar.month_name).index(m) for m in selected_month_names]
-        df_filtered = df_filtered[df_filtered["appointment_date"].dt.month.isin(selected_months)]
-        min_date = df_filtered["appointment_date"].min()
-        max_date = df_filtered["appointment_date"].max()
-        start_date = st.date_input("Choose Start Date", value=min_date, min_value=min_date, max_value=max_date)
-        end_date = st.date_input("Choose End Date", value=max_date, min_value=min_date, max_value=max_date)
-        df_filtered = df_filtered[
-            (df_filtered["appointment_date"] >= pd.to_datetime(start_date)) &
-            (df_filtered["appointment_date"] <= pd.to_datetime(end_date))]
-    if df_filtered.empty:
-        st.info("No appointments found in the selected period.")
-        return
-    st.markdown("""
-    <style>
-        .header-row { background-color: #1565c0; color: white; padding: 8px; border-radius: 5px; font-weight: bold; }
-        .data-row { padding: 6px; border-radius: 5px; }
-        .row-even { background-color: #2c2c2c; }
-        .row-odd { background-color: #1e1e1e; }
-        .no-response { color: #f39c12; font-weight: bold; }
-        .responded { color: #2ecc71; font-weight: bold; }
-    </style>
-    """, unsafe_allow_html=True)
-    header_cols = st.columns([2, 3, 2, 2, 3, 2, 2, 2])
-    titles = ["Client", "Email/Phone", "Date", "Time", "Reason", "Response", "Reply", "Confirm"]
-    for col, t in zip(header_cols, titles):
-        col.markdown(f"<div class='header-row'>{t}</div>", unsafe_allow_html=True)
-    for idx, row in df_filtered.iterrows():
-        row_class = "row-even" if idx % 2 == 0 else "row-odd"
-        row_cols = st.columns([2, 3, 2, 2, 3, 2, 2, 2])
-        client_id = row.get("user_id") or row.get("id") or row.get("appointment_id")
-        client_name = row.get("client_name") or row.get("full_name")
-        client_info = fetch_client_details(client_id) or {}
-        client_id = client_info.get("user_id", client_id)
-        client_name = client_info.get("full_name", client_name)
-        client_email = client_info.get("email", row.get("client_email", ""))
-        client_phone = client_info.get("contact", row.get("client_phone", ""))
-        client_type = client_info.get("role", row.get("client_type", "Client"))
-        appointment_date = row["appointment_date"].date()
-        appointment_time = row.get("appointment_time")
-        reason = row.get("reason", "")
-        response = row.get("response", "")
-        row_cols[0].markdown(f"<div class='data-row {row_class}'>{client_name}</div>", unsafe_allow_html=True)
-        row_cols[1].markdown(f"<div class='data-row {row_class}'>{client_email} / {client_phone}</div>", unsafe_allow_html=True)
-        row_cols[2].markdown(f"<div class='data-row {row_class}'>{appointment_date}</div>", unsafe_allow_html=True)
-        row_cols[3].markdown(f"<div class='data-row {row_class}'>{appointment_time}</div>", unsafe_allow_html=True)
-        row_cols[4].markdown(f"<div class='data-row {row_class}'>{reason}</div>", unsafe_allow_html=True)
-        is_responded = bool(response.strip())
-        response_display = f"<span class='responded'>{response}</span>" if is_responded else "<span class='no-response'>Pending</span>"
-        row_cols[5].markdown(f"<div class='data-row {row_class}'>{response_display}</div>", unsafe_allow_html=True)
-        reply_key = f"respond_btn_{client_id}_{idx}"
-        if not is_responded:
-            if row_cols[6].button("Reply", key=reply_key):
-                st.session_state["active_appointment_row"] = row.to_dict()
-                respond_dialog()
-        else:
-            row_cols[6].markdown(f"<div class='data-row {row_class}'>✅</div>", unsafe_allow_html=True)
-        active_client = st.session_state.get("active_confirm_client")
-        active_client_id = active_client.get("id") if active_client else None
-        confirm_key = f"confirm_btn_{client_id}_{idx}"
-        close_key = f"close_btn_{client_id}_{idx}"
-        if active_client_id == client_id:
-            if row_cols[7].button("Close", key=close_key):
-                st.session_state["active_confirm_client"] = None
-                st.rerun() 
-        else:
-            if row_cols[7].button("Confirm", key=confirm_key):
-                st.session_state["active_confirm_client"] = {
-                    "id": client_id,
-                    "client_name": client_name,
-                    "client_email": client_email,
-                    "client_phone": client_phone,
-                    "client_type": client_type,
-                    "appointment_date": str(appointment_date),
-                    "appointment_time": appointment_time,
-                    "reason": reason,
-                }
-                st.rerun()  # refresh immediately
+# def view_appointments(therapist_name: str):
+#     df = view_appointment_requests(therapist_name)
+#     if df.empty:
+#         st.info(f"No appointments found for {therapist_name}.")
+#         return
+#     df["appointment_date"] = pd.to_datetime(df["appointment_date"])
+#     df["response_date"] = pd.to_datetime(df.get("response_date"), errors='coerce')
+#     with st.sidebar.expander('📅 Filter Appointments by Date', expanded=True):
+#         all_years = sorted(df["appointment_date"].dt.year.unique(), reverse=True)
+#         selected_years = st.multiselect("Select Year(s)", options=all_years, default=all_years)
+#         df_filtered = df[df["appointment_date"].dt.year.isin(selected_years)]
+#         available_months = sorted(df_filtered["appointment_date"].dt.month.unique())
+#         month_names = [calendar.month_name[m] for m in available_months]
+#         selected_month_names = st.multiselect("Select Month(s)", options=month_names, default=month_names)
+#         selected_months = [list(calendar.month_name).index(m) for m in selected_month_names]
+#         df_filtered = df_filtered[df_filtered["appointment_date"].dt.month.isin(selected_months)]
+#         min_date = df_filtered["appointment_date"].min()
+#         max_date = df_filtered["appointment_date"].max()
+#         start_date = st.date_input("Choose Start Date", value=min_date, min_value=min_date, max_value=max_date)
+#         end_date = st.date_input("Choose End Date", value=max_date, min_value=min_date, max_value=max_date)
+#         df_filtered = df_filtered[
+#             (df_filtered["appointment_date"] >= pd.to_datetime(start_date)) &
+#             (df_filtered["appointment_date"] <= pd.to_datetime(end_date))]
+#     if df_filtered.empty:
+#         st.info("No appointments found in the selected period.")
+#         return
+#     st.markdown("""
+#     <style>
+#         .header-row { background-color: #1565c0; color: white; padding: 8px; border-radius: 5px; font-weight: bold; }
+#         .data-row { padding: 6px; border-radius: 5px; }
+#         .row-even { background-color: #2c2c2c; }
+#         .row-odd { background-color: #1e1e1e; }
+#         .no-response { color: #f39c12; font-weight: bold; }
+#         .responded { color: #2ecc71; font-weight: bold; }
+#     </style>
+#     """, unsafe_allow_html=True)
+#     header_cols = st.columns([2, 3, 2, 2, 3, 2, 2, 2])
+#     titles = ["Client", "Email/Phone", "Date", "Time", "Reason", "Response", "Reply", "Confirm"]
+#     for col, t in zip(header_cols, titles):
+#         col.markdown(f"<div class='header-row'>{t}</div>", unsafe_allow_html=True)
+#     for idx, row in df_filtered.iterrows():
+#         row_class = "row-even" if idx % 2 == 0 else "row-odd"
+#         row_cols = st.columns([2, 3, 2, 2, 3, 2, 2, 2])
+#         client_id = row.get("user_id") or row.get("id") or row.get("appointment_id")
+#         client_name = row.get("client_name") or row.get("full_name")
+#         client_info = fetch_client_details(client_id) or {}
+#         client_id = client_info.get("user_id", client_id)
+#         client_name = client_info.get("full_name", client_name)
+#         client_email = client_info.get("email", row.get("client_email", ""))
+#         client_phone = client_info.get("contact", row.get("client_phone", ""))
+#         client_type = client_info.get("role", row.get("client_type", "Client"))
+#         appointment_date = row["appointment_date"].date()
+#         appointment_time = row.get("appointment_time")
+#         reason = row.get("reason", "")
+#         response = row.get("response", "")
+#         row_cols[0].markdown(f"<div class='data-row {row_class}'>{client_name}</div>", unsafe_allow_html=True)
+#         row_cols[1].markdown(f"<div class='data-row {row_class}'>{client_email} / {client_phone}</div>", unsafe_allow_html=True)
+#         row_cols[2].markdown(f"<div class='data-row {row_class}'>{appointment_date}</div>", unsafe_allow_html=True)
+#         row_cols[3].markdown(f"<div class='data-row {row_class}'>{appointment_time}</div>", unsafe_allow_html=True)
+#         row_cols[4].markdown(f"<div class='data-row {row_class}'>{reason}</div>", unsafe_allow_html=True)
+#         is_responded = bool(response.strip())
+#         response_display = f"<span class='responded'>{response}</span>" if is_responded else "<span class='no-response'>Pending</span>"
+#         row_cols[5].markdown(f"<div class='data-row {row_class}'>{response_display}</div>", unsafe_allow_html=True)
+#         reply_key = f"respond_btn_{client_id}_{idx}"
+#         if not is_responded:
+#             if row_cols[6].button("Reply", key=reply_key):
+#                 st.session_state["active_appointment_row"] = row.to_dict()
+#                 respond_dialog()
+#         else:
+#             row_cols[6].markdown(f"<div class='data-row {row_class}'>✅</div>", unsafe_allow_html=True)
+#         active_client = st.session_state.get("active_confirm_client")
+#         active_client_id = active_client.get("id") if active_client else None
+#         confirm_key = f"confirm_btn_{client_id}_{idx}"
+#         close_key = f"close_btn_{client_id}_{idx}"
+#         if active_client_id == client_id:
+#             if row_cols[7].button("Close", key=close_key):
+#                 st.session_state["active_confirm_client"] = None
+#                 st.rerun() 
+#         else:
+#             if row_cols[7].button("Confirm", key=confirm_key):
+#                 st.session_state["active_confirm_client"] = {
+#                     "id": client_id,
+#                     "client_name": client_name,
+#                     "client_email": client_email,
+#                     "client_phone": client_phone,
+#                     "client_type": client_type,
+#                     "appointment_date": str(appointment_date),
+#                     "appointment_time": appointment_time,
+#                     "reason": reason,
+#                 }
+#                 st.rerun()  # refresh immediately
 
-    # --- Sidebar selected client details ---
-    client = st.session_state.get("active_confirm_client")
-    if client:
-        db_client = fetch_client_details(client.get("client_name"))
-        if db_client:
-            user_id = db_client["user_id"]
-            name = db_client["full_name"]
-            client_type = db_client["role"]
-            email = db_client["email"]
-            phone = db_client["contact"]
+#     # --- Sidebar selected client details ---
+#     client = st.session_state.get("active_confirm_client")
+#     if client:
+#         db_client = fetch_client_details(client.get("client_name"))
+#         if db_client:
+#             user_id = db_client["user_id"]
+#             name = db_client["full_name"]
+#             client_type = db_client["role"]
+#             email = db_client["email"]
+#             phone = db_client["contact"]
 
-            with st.sidebar.expander("📌 Selected Client Details", expanded=True):
-                st.markdown(f"**Client Name:** {name}")
-                st.markdown(f"**Client ID:** {user_id}")
-                st.markdown(f"**Email:** {email}")
-                st.markdown(f"**Phone:** {phone}")
-                st.markdown(f"**Client Type:** {client_type}")
+#             with st.sidebar.expander("📌 Selected Client Details", expanded=True):
+#                 st.markdown(f"**Client Name:** {name}")
+#                 st.markdown(f"**Client ID:** {user_id}")
+#                 st.markdown(f"**Email:** {email}")
+#                 st.markdown(f"**Phone:** {phone}")
+#                 st.markdown(f"**Client Type:** {client_type}")
 
-            st.markdown("---")
-            st.subheader("📋 Confirm Appointment Form")
-            appointment_form()
+#             st.markdown("---")
+#             st.subheader("📋 Confirm Appointment Form")
+#             appointment_form()
 
 
 # def view_appointments(therapist_name: str):
@@ -492,6 +492,12 @@ def view_appointments(therapist_name: str):
 #             if row_cols[6].button("Reply", key=reply_key):
 #                 st.session_state["active_appointment_row"] = row.to_dict()
 #                 respond_dialog()
+        
+
+
+
+
+
 #         else:
 #             row_cols[6].markdown(f"<div class='data-row {row_class}'>✅</div>", unsafe_allow_html=True)
 
@@ -538,6 +544,145 @@ def view_appointments(therapist_name: str):
 #             st.markdown("---")
 #             st.subheader("📋 Confirm Appointment Form")
 #             appointment_form()
+def view_appointments(therapist_name: str):
+    df = view_appointment_requests(therapist_name)
+    if df.empty:
+        st.info(f"No appointments found for {therapist_name}.")
+        return
+
+    # --- Convert dates safely ---
+    df["appointment_date"] = pd.to_datetime(df["appointment_date"], errors="coerce")
+    df["response_date"] = pd.to_datetime(df.get("response_date"), errors="coerce")
+
+    # --- Sidebar filters ---
+    with st.sidebar.expander('📅 Filter Appointments by Date', expanded=True):
+        all_years = sorted(df["appointment_date"].dt.year.dropna().unique(), reverse=True)
+        selected_years = st.multiselect("Select Year(s)", options=all_years, default=all_years)
+        df_filtered = df[df["appointment_date"].dt.year.isin(selected_years)]
+
+        available_months = sorted(df_filtered["appointment_date"].dt.month.dropna().unique())
+        month_names = [calendar.month_name[m] for m in available_months]
+        selected_month_names = st.multiselect("Select Month(s)", options=month_names, default=month_names)
+        selected_months = [list(calendar.month_name).index(m) for m in selected_month_names]
+        df_filtered = df_filtered[df_filtered["appointment_date"].dt.month.isin(selected_months)]
+
+        min_date = df_filtered["appointment_date"].min()
+        max_date = df_filtered["appointment_date"].max()
+        if pd.notna(min_date) and pd.notna(max_date):
+            start_date = st.date_input("Choose Start Date", value=min_date, min_value=min_date, max_value=max_date)
+            end_date = st.date_input("Choose End Date", value=max_date, min_value=min_date, max_value=max_date)
+            df_filtered = df_filtered[
+                (df_filtered["appointment_date"] >= pd.to_datetime(start_date)) &
+                (df_filtered["appointment_date"] <= pd.to_datetime(end_date))
+            ]
+
+    if df_filtered.empty:
+        st.info("No appointments found in the selected period.")
+        return
+
+    # --- Table header styling ---
+    st.markdown("""
+    <style>
+        .header-row { background-color: #1565c0; color: white; padding: 8px; border-radius: 5px; font-weight: bold; }
+        .data-row { padding: 6px; border-radius: 5px; }
+        .row-even { background-color: #2c2c2c; }
+        .row-odd { background-color: #1e1e1e; }
+        .no-response { color: #f39c12; font-weight: bold; }
+        .responded { color: #2ecc71; font-weight: bold; }
+    </style>
+    """, unsafe_allow_html=True)
+
+    header_cols = st.columns([2, 3, 2, 2, 3, 2, 2, 2])
+    titles = ["Client", "Email/Phone", "Date", "Time", "Reason", "Response", "Reply", "Confirm"]
+    for col, t in zip(header_cols, titles):
+        col.markdown(f"<div class='header-row'>{t}</div>", unsafe_allow_html=True)
+
+    # --- Appointment rows ---
+    for idx, row in df_filtered.iterrows():
+        row_class = "row-even" if idx % 2 == 0 else "row-odd"
+        row_cols = st.columns([2, 3, 2, 2, 3, 2, 2, 2])
+
+        # --- Client & appointment details (safe defaults) ---
+        client_id = row.get("user_id") or row.get("id") or row.get("appointment_id") or ""
+        client_name = row.get("client_name") or row.get("full_name") or "Unknown"
+        client_info = fetch_client_details(client_id) or {}
+
+        client_id = client_info.get("user_id", client_id)
+        client_name = client_info.get("full_name", client_name)
+        client_email = client_info.get("email", row.get("client_email", ""))
+        client_phone = client_info.get("contact", row.get("client_phone", ""))
+        client_type = client_info.get("role", row.get("client_type", "Client"))
+
+        appointment_date = row.get("appointment_date")
+        appointment_date = appointment_date.date() if pd.notna(appointment_date) else "N/A"
+        appointment_time = row.get("appointment_time") or "N/A"
+        reason = row.get("reason") or ""
+        response = row.get("response") or ""
+
+        # --- Render row ---
+        row_cols[0].markdown(f"<div class='data-row {row_class}'>{client_name}</div>", unsafe_allow_html=True)
+        row_cols[1].markdown(f"<div class='data-row {row_class}'>{client_email} / {client_phone}</div>", unsafe_allow_html=True)
+        row_cols[2].markdown(f"<div class='data-row {row_class}'>{appointment_date}</div>", unsafe_allow_html=True)
+        row_cols[3].markdown(f"<div class='data-row {row_class}'>{appointment_time}</div>", unsafe_allow_html=True)
+        row_cols[4].markdown(f"<div class='data-row {row_class}'>{reason}</div>", unsafe_allow_html=True)
+
+        # --- Response column ---
+        is_responded = bool(response.strip())
+        response_display = f"<span class='responded'>{response}</span>" if is_responded else "<span class='no-response'>Pending</span>"
+        row_cols[5].markdown(f"<div class='data-row {row_class}'>{response_display}</div>", unsafe_allow_html=True)
+
+        # --- Reply button ---
+        reply_key = f"respond_btn_{client_id}_{idx}"
+        if not is_responded:
+            if row_cols[6].button("Reply", key=reply_key):
+                st.session_state["active_appointment_row"] = row.to_dict()
+                respond_dialog()
+        else:
+            row_cols[6].markdown(f"<div class='data-row {row_class}'>✅</div>", unsafe_allow_html=True)
+
+        # --- Confirm / Close button ---
+        active_client = st.session_state.get("active_confirm_client")
+        active_client_id = active_client.get("id") if active_client else None
+
+        confirm_key = f"confirm_btn_{client_id}_{idx}"
+        close_key = f"close_btn_{client_id}_{idx}"
+        if active_client_id == client_id:
+            if row_cols[7].button("Close", key=close_key):
+                st.session_state["active_confirm_client"] = None
+        else:
+            if row_cols[7].button("Confirm", key=confirm_key):
+                st.session_state["active_confirm_client"] = {
+                    "id": client_id,
+                    "client_name": client_name,
+                    "client_email": client_email,
+                    "client_phone": client_phone,
+                    "client_type": client_type,
+                    "appointment_date": str(appointment_date),
+                    "appointment_time": appointment_time,
+                    "reason": reason,
+                }
+
+    # --- Sidebar selected client details ---
+    client = st.session_state.get("active_confirm_client")
+    if client:
+        db_client = fetch_client_details(client.get("client_name"))
+        if db_client:
+            user_id = db_client.get("user_id", "")
+            name = db_client.get("full_name", "Unknown")
+            client_type = db_client.get("role", "Client")
+            email = db_client.get("email", "")
+            phone = db_client.get("contact", "")
+
+            with st.sidebar.expander("📌 Selected Client Details", expanded=True):
+                st.markdown(f"**Client Name:** {name}")
+                st.markdown(f"**Client ID:** {user_id}")
+                st.markdown(f"**Email:** {email}")
+                st.markdown(f"**Phone:** {phone}")
+                st.markdown(f"**Client Type:** {client_type}")
+
+            st.markdown("---")
+            st.subheader("📋 Confirm Appointment Form")
+            appointment_form()
 
 
 def main():

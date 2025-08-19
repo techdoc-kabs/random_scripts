@@ -88,89 +88,6 @@ else:
 
 
 
-# dark_css = """
-# <style>
-# /* Only color the app container if no custom background image is applied */
-# .stApp:not(.custom-background) {
-#     background-color: #121212;
-#     color: #FFFFFF;
-# }
-
-# /* Sidebar background */
-# [data-testid="stSidebar"] {
-#     background-color: #1E1E1E;
-# }
-
-# /* Inputs and buttons */
-# input, textarea, select, button, .stButton button {
-#     background-color: brown;
-#     color: #FFFFFF;
-#     border-color: #333333;
-# }
-
-# /* Tables */
-# .stDataFrame, .stDataFrame td, .stDataFrame th {
-#     background-color: #1E1E1E;
-#     color: #FFFFFF !important;
-# }
-
-# /* Keep custom cards and images intact */
-# .custom-card, .custom-background {
-#     background-color: unset !important;
-#     color: unset !important;
-# }
-
-# /* Scrollbar styling (optional) */
-# ::-webkit-scrollbar {
-#     width: 10px;
-# }
-# ::-webkit-scrollbar-track {
-#     background: #1E1E1E;
-# }
-# ::-webkit-scrollbar-thumb {
-#     background-color: #333333;
-#     border-radius: 10px;
-# }
-# </style>
-# """
-
-# st.markdown(dark_css, unsafe_allow_html=True)
-
-
-# def set_custom_background(bg_color="skyblue", sidebar_img=None, sidebar_width="200px"):
-#     page_bg_img = f"""
-#         <style>
-#         [data-testid="stAppViewContainer"] > .main {{
-#             background-color: {bg_color if bg_color else "transparent"};
-#             background-size: 140%;
-#             background-position: top left;
-#             background-repeat: repeat;
-#             background-attachment: local;
-#             padding-top: 0px;}}
-#         /* Reduce sidebar width */
-#         section[data-testid="stSidebar"] {{
-#             width: {sidebar_width} !important;
-#             min-width: {sidebar_width} !important;}}
-
-#         [data-testid="stSidebar"] > div:first-child {{
-#             {"background-image: url('data:image/png;base64," + sidebar_img + "');" if sidebar_img else ""}
-#             background-position: center; 
-#             background-repeat: no-repeat;
-#             background-attachment: fixed;
-#             background-size: cover;}}
-
-#         [data-testid="stHeader"] {{
-#             background: rgba(0,0,0,0);
-#             padding-top: 0px;
-#         }}
-
-#         [data-testid="stToolbar"] {{
-#             right: 2rem;
-#         }}
-#         </style>
-#     """
-
-
 
 import streamlit as st
 import base64
@@ -399,57 +316,58 @@ def logout():
     st.rerun()
 
 
-
-def button_click():
-    if "show_appointment_form" not in st.session_state:
-        st.session_state.show_appointment_form = False
+@st.dialog("🗓️ Book Appointment", width="small")
+def show_appointment_dialog():
+    import time
 
     st.markdown("""
         <style>
-        div.stButton > button {
-            background-color: #00897b;
-            color: white !important;
-            padding: 12px 28px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
+        .tight-label {
+            color: #FF8C00;
+            font-weight: 500;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            display: block;
+            font-style: Times New Roman;
         }
-        div.stButton > button:hover {
-            background-color: #e53935;
-            color: white !important;
+        /* Pull inputs closer to labels */
+        .stTextInput > div > div > input,
+        .stTextArea > div > div > textarea,
+        .stDateInput > div > div > input,
+        .stTimeInput > div > div > input {
+            margin-top: -5px !important;
         }
         </style>
     """, unsafe_allow_html=True)
-    if st.button("🗓️ Book Appointment"):
-        st.session_state.show_appointment_form = not st.session_state.show_appointment_form
 
-    if st.session_state.show_appointment_form:
-        with st.form("appointment_form"):
-            name = st.text_input(":orange[Full Name]")
-            email = st.text_input(":orange[Email Address]")
-            tel = st.text_input(":orange[Telephone]", placeholder='')
-            date = st.date_input(":orange[Preferred Date]")
-            time = st.time_input(":orange[Preferred Time]")
-            reason = st.text_area(":orange[Reason for Appointment]", height=100)
+    with st.form("appointment_form"):
+        st.markdown('<span class="tight-label">Full Name</span>', unsafe_allow_html=True)
+        name = st.text_input("", key="appt_name")
 
-            submitted = st.form_submit_button("✅ Submit Appointment")
+        st.markdown('<span class="tight-label">Email Address</span>', unsafe_allow_html=True)
+        email = st.text_input("", key="appt_email")
 
-            if submitted:
-                if name.strip() and email.strip() and reason.strip():
-                    st.success(f"✅ Appointment booked for {name} on {date} at {time}")
-                    import time
-                    time.sleep(3)
-                    st.session_state.show_appointment_form = False
-                    st.rerun()
-                else:
-                    st.warning("⚠️ Please fill in all required fields.")
-        if st.button("Close form"):
-            st.session_state.show_appointment_form = False
-            st.rerun()
+        st.markdown('<span class="tight-label">Telephone</span>', unsafe_allow_html=True)
+        tel = st.text_input("", key="appt_tel", placeholder='')
+
+        st.markdown('<span class="tight-label">Preferred Date</span>', unsafe_allow_html=True)
+        date = st.date_input("")
+
+        st.markdown('<span class="tight-label">Preferred Time</span>', unsafe_allow_html=True)
+        time_input = st.time_input("")
+
+        st.markdown('<span class="tight-label">Reason for Appointment</span>', unsafe_allow_html=True)
+        reason = st.text_area("", height=100, key="appt_reason")
+
+        submitted = st.form_submit_button("✅ Submit Appointment")
+
+        if submitted:
+            if name.strip() and email.strip() and reason.strip():
+                st.success(f"✅ Appointment booked for {name} on {date} at {time_input}")
+                time.sleep(2)
+            else:
+                st.warning("⚠️ Please fill in all required fields.")
 
 
 def create_connection():
@@ -514,54 +432,6 @@ def save_appointment(name, email, date, appointment_time, reason, tel=""):
     conn.close()
 
 
-def appointment_section():
-    if "show_appointment_form" not in st.session_state:
-        st.session_state.show_appointment_form = False
-
-    st.markdown("""
-        <style>
-        div.stButton > button {
-            background-color: #00897b;
-            color: white !important;
-            padding: 12px 28px;
-            border-radius: 25px;
-            font-size: 22px;
-            font-weight: bold;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        div.stButton > button:hover {
-            background-color: #e53935;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    if st.button("🗓️ Book Appointment"):
-        st.session_state.show_appointment_form = True
-
-    if st.session_state.show_appointment_form:
-        with st.form("appointment_form"):
-            st.subheader("📋 Appointment Form")
-            name = st.text_input("Full Name")
-            email = st.text_input("Email Address")
-            tel = st.text_input("Phone Number")
-            date = st.date_input("Preferred Date")
-            appointment_time = st.time_input("Preferred Time")
-            reason = st.text_area("Reason for Appointment", height=100)
-
-            submitted = st.form_submit_button("✅ Submit Appointment")
-            if submitted:
-                if name.strip() and email.strip() and tel.strip() and reason.strip():
-                    save_appointment(name, email, date, appointment_time, reason, tel)
-                    st.success(f"✅ Appointment booked for {name} on {date} at {appointment_time}")
-                    st.session_state.show_appointment_form = False
-                    time.sleep(1)
-                    st.rerun()
-                else:
-                    st.warning("⚠️ Please fill in all required fields.")
-
 create_tables()
 @st.dialog("💬 Feedback")
 def feedback_dialog():
@@ -606,6 +476,54 @@ def get_fisrt_name_from_username(username):
     else:
         return username
 
+import streamlit as st
+import time
+
+# import streamlit as st
+
+# # Initialize session state for theme
+# if "dark_mode" not in st.session_state:
+#     st.session_state.dark_mode = True  # Default: dark theme
+
+# # Function to switch theme dynamically
+# def toggle_theme():
+#     st.session_state.dark_mode = not st.session_state.dark_mode
+
+# # Button to toggle
+# st.button(
+#     "🌙 Toggle Dark/Light Mode",
+#     on_click=toggle_theme
+# )
+
+# # Apply CSS based on theme
+# if st.session_state.dark_mode:
+#     st.markdown(
+#         """
+#         <style>
+#         body { background-color: #121212; color: #FFFFFF; }
+#         .stButton>button { background-color: #333333; color: #FFFFFF; border: 1px solid #555555; }
+#         input, select, textarea { background-color: #333333; color: #FFFFFF; border: 1px solid #555555; }
+#         </style>
+#         """,
+#         unsafe_allow_html=True
+#     )
+# else:
+#     st.markdown(
+#         """
+#         <style>
+#         body { background-color: #FFFFFF; color: #000000; }
+#         .stButton>button { background-color: #F0F2F6; color: #000000; border: 1px solid #CCC; }
+#         input, select, textarea { background-color: #FFFFFF; color: #000000; border: 1px solid #CCC; }
+#         </style>
+#         """,
+#         unsafe_allow_html=True
+#     )
+
+# # Example content
+# st.title("Dark/Light Theme Toggle Example")
+# st.write("Click the button above to switch themes dynamically!")
+
+#     # Call the dialog
 
 def main():
     create_connection()
@@ -641,7 +559,89 @@ def main():
         import welcome
         welcome.main()
         import time
-        button_click()
+        if "show_appointment_form" not in st.session_state:
+            st.session_state.show_appointment_form = False
+        st.markdown("""
+            <style>
+            div.stButton > button {
+                background-color: #00897b;
+                color: white !important;
+                padding: 12px 28px;
+                border-radius: 25px;
+                font-size: 16px;
+                font-weight: bold;
+                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+                transition: all 0.3s ease;
+                border: none;
+                cursor: pointer;
+            }
+            div.stButton > button:hover {
+                background-color: #e53935;
+                color: white !important;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+
+        if st.button("🗓️ Book Appointment"):
+            st.session_state.show_appointment_form = True
+        if st.session_state.get("show_appointment_form", False):
+
+            @st.dialog("🗓️ Book Appointment", width="small")
+            def show_appointment_dialog():
+                st.markdown("""
+                    <style>
+                    .tight-label {
+                        color: #FF8C00;
+                        font-weight: 500;
+                        margin: 0;
+                        padding: 0;
+                        line-height: 1;
+                        display: block;
+                        font-style: Times New Roman;
+                    }
+                    .stTextInput > div > div > input,
+                    .stTextArea > div > div > textarea,
+                    .stDateInput > div > div > input,
+                    .stTimeInput > div > div > input {
+                        margin-top: -5px !important;
+                    }
+                    </style>
+                """, unsafe_allow_html=True)
+
+                with st.form("appointment_form"):
+                    st.markdown('<span class="tight-label">Full Name</span>', unsafe_allow_html=True)
+                    name = st.text_input("", key="appt_name")
+
+                    st.markdown('<span class="tight-label">Email Address</span>', unsafe_allow_html=True)
+                    email = st.text_input("", key="appt_email")
+
+                    st.markdown('<span class="tight-label">Telephone</span>', unsafe_allow_html=True)
+                    tel = st.text_input("", key="appt_tel", placeholder='')
+
+                    st.markdown('<span class="tight-label">Preferred Date</span>', unsafe_allow_html=True)
+                    date = st.date_input("")
+
+                    st.markdown('<span class="tight-label">Preferred Time</span>', unsafe_allow_html=True)
+                    time_input = st.time_input("")
+
+                    st.markdown('<span class="tight-label">Reason for Appointment</span>', unsafe_allow_html=True)
+                    reason = st.text_area("", height=100, key="appt_reason")
+
+                    submitted = st.form_submit_button("✅ Submit Appointment")
+                    if submitted:
+                        if name.strip() and email.strip() and reason.strip():
+                            st.success(f"✅ Appointment booked for {name} on {date} at {time_input}")
+                            time.sleep(2)
+                            st.session_state.show_appointment_form = False  # close dialog
+                            st.rerun()
+                        else:
+                            st.warning("⚠️ Please fill in all required fields.")
+
+                # Optional: Close button inside dialog
+                # if st.button("❌ Close"):
+                #     st.session_state.show_appointment_form = False
+                #     st.rerun()
+            show_appointment_dialog()
         col1, col2, col3 = st.columns([1.5, 1, 0.8], gap="small")
 
         with col3:

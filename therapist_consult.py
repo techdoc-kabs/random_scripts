@@ -180,12 +180,12 @@ def fetch_clients_by_search(db, therapist_name, search_input, selected_client_ty
     final_results = []
     for appt in filtered:
         user_id = appt['user_id']
-        cursor.execute("SELECT age, gender, class, stream FROM users WHERE user_id = ?", (user_id,))
+        cursor.execute("SELECT age, sex, class, stream FROM users WHERE user_id = ?", (user_id,))
         user_row = cursor.fetchone()
         if user_row:
             appt.update({
                 "age": user_row[0],
-                "gender": user_row[1],
+                "sex": user_row[1],
                 "class": user_row[2],
                 "stream": user_row[3],
                 "full_name": appt["name"],
@@ -193,7 +193,7 @@ def fetch_clients_by_search(db, therapist_name, search_input, selected_client_ty
         else:
             appt.update({
                 "age": "N/A",
-                "gender": "N/A",
+                "sex": "N/A",
                 "class": "N/A",
                 "stream": "N/A",
                 "full_name": appt["name"],
@@ -469,7 +469,7 @@ def main():
             ("Appointment date", selected_record[0]['appointment_date']),
             ("Name", selected_record[0]['full_name']),
             ("Age", f"{selected_record[0]['age']} Years"),
-            ("Gender", selected_record[0]['gender']),
+            ("Gender", selected_record[0]['sex']),
             ("Class", selected_record[0]['class']),
             ("Stream", selected_record[0]['stream']),
         ]
