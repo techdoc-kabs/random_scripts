@@ -189,144 +189,144 @@
 
 
 
-# def view_observations():
-#     set_full_page_background('images/black_strip.jpg')
-#     conn = create_connection()
+def view_observations():
+    set_full_page_background('images/black_strip.jpg')
+    conn = create_connection()
 
-#     query = """
-#         SELECT 
-#             observation_type, class_name, stream_name, student_name,
-#             date_observed, observed_behavior, description,
-#             possible_cause, recommendation, urgency,
-#             submitted_by, submitted_on,
-#             response, responder, response_date
-#         FROM teachers_observations
-#         ORDER BY date_observed DESC
-#     """
-#     df = pd.read_sql_query(query, conn)
-#     conn.close()
+    query = """
+        SELECT 
+            observation_type, class_name, stream_name, student_name,
+            date_observed, observed_behavior, description,
+            possible_cause, recommendation, urgency,
+            submitted_by, submitted_on,
+            response, responder, response_date
+        FROM teachers_observations
+        ORDER BY date_observed DESC
+    """
+    df = pd.read_sql_query(query, conn)
+    conn.close()
 
-#     if df.empty:
-#         st.info("No observations found.")
-#         return
+    if df.empty:
+        st.info("No observations found.")
+        return
 
-#     df.index = df.index + 1
-#     df["date_observed"] = pd.to_datetime(df["date_observed"]).dt.strftime('%Y-%m-%d')
-#     df["submitted_on"] = pd.to_datetime(df["submitted_on"]).dt.strftime('%Y-%m-%d')
-#     df["response_date"] = pd.to_datetime(df["response_date"], errors='coerce').dt.strftime('%Y-%m-%d')
-#     df["response_date"] = df["response_date"].fillna('—')
-#     df["response"] = df["response"].fillna('—')
-#     df["responder"] = df["responder"].fillna('—')
+    df.index = df.index + 1
+    df["date_observed"] = pd.to_datetime(df["date_observed"]).dt.strftime('%Y-%m-%d')
+    df["submitted_on"] = pd.to_datetime(df["submitted_on"]).dt.strftime('%Y-%m-%d')
+    df["response_date"] = pd.to_datetime(df["response_date"], errors='coerce').dt.strftime('%Y-%m-%d')
+    df["response_date"] = df["response_date"].fillna('—')
+    df["response"] = df["response"].fillna('—')
+    df["responder"] = df["responder"].fillna('—')
 
-#     st.markdown("""
-#         <style>
-#             .obs-table {
-#                 border-collapse: collapse;
-#                 width: 100%;
-#                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-#                 font-size: 15px;
-#                 color: #eee;
-#             }
-#             .obs-table th, .obs-table td {
-#                 border: 1px solid #444;
-#                 padding: 10px 12px;
-#                 text-align: left;
-#                 vertical-align: top;
-#             }
-#             .obs-table th {
-#                 background-color: #4A90E2;
-#                 color: white;
-#                 font-weight: 600;
-#             }
-#             .obs-table tbody tr:nth-child(even) {
-#                 background-color: #1e1e1e;
-#             }
-#             .obs-table tbody tr:nth-child(odd) {
-#                 background-color: #2c2c2c;
-#             }
-#             .type-cell { color: #FF9800; font-weight: 600; }
-#             .behavior-cell { color: #8BC34A; font-weight: 600; }
-#             .cause-cell { color: #E91E63; font-weight: 500; }
-#             .recommend-cell { color: #2196F3; font-style: italic; }
-#             .response-cell { color: #FFD700; font-style: italic; } 
-#             .meta-cell { color: #bbbbbb; font-size: 13px; }
-#             .urgency-low { color: #4CAF50; font-weight: bold; }
-#             .urgency-moderate { color: #FFC107; font-weight: bold; }
-#             .urgency-high { color: #F44336; font-weight: bold; }
-#         </style>
-#     """, unsafe_allow_html=True)
+    st.markdown("""
+        <style>
+            .obs-table {
+                border-collapse: collapse;
+                width: 100%;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 15px;
+                color: #eee;
+            }
+            .obs-table th, .obs-table td {
+                border: 1px solid #444;
+                padding: 10px 12px;
+                text-align: left;
+                vertical-align: top;
+            }
+            .obs-table th {
+                background-color: #4A90E2;
+                color: white;
+                font-weight: 600;
+            }
+            .obs-table tbody tr:nth-child(even) {
+                background-color: #1e1e1e;
+            }
+            .obs-table tbody tr:nth-child(odd) {
+                background-color: #2c2c2c;
+            }
+            .type-cell { color: #FF9800; font-weight: 600; }
+            .behavior-cell { color: #8BC34A; font-weight: 600; }
+            .cause-cell { color: #E91E63; font-weight: 500; }
+            .recommend-cell { color: #2196F3; font-style: italic; }
+            .response-cell { color: #FFD700; font-style: italic; } 
+            .meta-cell { color: #bbbbbb; font-size: 13px; }
+            .urgency-low { color: #4CAF50; font-weight: bold; }
+            .urgency-moderate { color: #FFC107; font-weight: bold; }
+            .urgency-high { color: #F44336; font-weight: bold; }
+        </style>
+    """, unsafe_allow_html=True)
 
-#     table_html = '<table class="obs-table">'
-#     table_html += """<thead>
-#             <tr>
-#                 <th>#</th>
-#                 <th>Type</th>
-#                 <th>Student/Class</th>
-#                 <th>Date Observed</th>
-#                 <th>Observed Behavior</th>
-#                 <th>Description</th>
-#                 <th>Possible Cause</th>
-#                 <th>Recommendation</th>
-#                 <th>Urgency</th>
-#                 <th>Submitted By</th>
-#                 <th>Date Submitted</th>
-#                 <th>Response</th>
-#                 <th>Responder</th>
-#                 <th>Response Date</th>
-#             </tr>
-#         </thead>
-#         <tbody>
-#     """
+    table_html = '<table class="obs-table">'
+    table_html += """<thead>
+            <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th>Student/Class</th>
+                <th>Date Observed</th>
+                <th>Observed Behavior</th>
+                <th>Description</th>
+                <th>Possible Cause</th>
+                <th>Recommendation</th>
+                <th>Urgency</th>
+                <th>Submitted By</th>
+                <th>Date Submitted</th>
+                <th>Response</th>
+                <th>Responder</th>
+                <th>Response Date</th>
+            </tr>
+        </thead>
+        <tbody>
+    """
 
-#     for idx, row in df.iterrows():
-#         urgency_class = {
-#             "Low": "urgency-low",
-#             "Moderate": "urgency-moderate",
-#             "High": "urgency-high"
-#         }.get(row['urgency'], "meta-cell")
-#         if row['student_name']:
-#             student_class_display = f"{row['student_name']} ({row['class_name']} - {row['stream_name']})"
-#         else:
-#             student_class_display = f"{row['class_name']} - {row['stream_name']}"
+    for idx, row in df.iterrows():
+        urgency_class = {
+            "Low": "urgency-low",
+            "Moderate": "urgency-moderate",
+            "High": "urgency-high"
+        }.get(row['urgency'], "meta-cell")
+        if row['student_name']:
+            student_class_display = f"{row['student_name']} ({row['class_name']} - {row['stream_name']})"
+        else:
+            student_class_display = f"{row['class_name']} - {row['stream_name']}"
 
-#         table_html += f"""<tr>
-#                 <td>{idx}</td>
-#                 <td class="type-cell">{row['observation_type']}</td>
-#                 <td class="meta-cell">{student_class_display}</td>
-#                 <td class="meta-cell">{row['date_observed']}</td>
-#                 <td class="behavior-cell">{row['observed_behavior']}</td>
-#                 <td class="meta-cell">{row['description']}</td>
-#                 <td class="cause-cell">{row['possible_cause']}</td>
-#                 <td class="recommend-cell">{row['recommendation']}</td>
-#                 <td class="{urgency_class}">{row['urgency']}</td>
-#                 <td class="meta-cell">{row['submitted_by']}</td>
-#                 <td class="meta-cell">{row['submitted_on']}</td>
-#                 <td class="response-cell">{row['response']}</td>
-#                 <td class="meta-cell">{row['responder']}</td>
-#                 <td class="meta-cell">{row['response_date']}</td>
-#             </tr>
-#         """
+        table_html += f"""<tr>
+                <td>{idx}</td>
+                <td class="type-cell">{row['observation_type']}</td>
+                <td class="meta-cell">{student_class_display}</td>
+                <td class="meta-cell">{row['date_observed']}</td>
+                <td class="behavior-cell">{row['observed_behavior']}</td>
+                <td class="meta-cell">{row['description']}</td>
+                <td class="cause-cell">{row['possible_cause']}</td>
+                <td class="recommend-cell">{row['recommendation']}</td>
+                <td class="{urgency_class}">{row['urgency']}</td>
+                <td class="meta-cell">{row['submitted_by']}</td>
+                <td class="meta-cell">{row['submitted_on']}</td>
+                <td class="response-cell">{row['response']}</td>
+                <td class="meta-cell">{row['responder']}</td>
+                <td class="meta-cell">{row['response_date']}</td>
+            </tr>
+        """
 
-#     table_html += "</tbody></table>"
-#     st.markdown(table_html, unsafe_allow_html=True)
+    table_html += "</tbody></table>"
+    st.markdown(table_html, unsafe_allow_html=True)
 
-# def update_teachers_observations_schema():
-#     conn = create_connection()
-#     c = conn.cursor()
-#     # Add missing columns if they don't exist
-#     columns_to_add = {
-#         "response": "TEXT",
-#         "responder": "TEXT",
-#         "response_date": "TEXT"
-#     }
-#     for col, col_type in columns_to_add.items():
-#         try:
-#             c.execute(f"ALTER TABLE teachers_observations ADD COLUMN {col} {col_type}")
-#         except sqlite3.OperationalError:
-#             # Column already exists
-#             pass
-#     conn.commit()
-#     conn.close()
+def update_teachers_observations_schema():
+    conn = create_connection()
+    c = conn.cursor()
+    # Add missing columns if they don't exist
+    columns_to_add = {
+        "response": "TEXT",
+        "responder": "TEXT",
+        "response_date": "TEXT"
+    }
+    for col, col_type in columns_to_add.items():
+        try:
+            c.execute(f"ALTER TABLE teachers_observations ADD COLUMN {col} {col_type}")
+        except sqlite3.OperationalError:
+            # Column already exists
+            pass
+    conn.commit()
+    conn.close()
 
 # # ---------- MAIN ----------
 # def main():
