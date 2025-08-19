@@ -569,7 +569,7 @@ def show_login_dialog():
     with col1:
         st.markdown(":orange[Don't have an account yet?]")
     with col2:
-        if st.button(":blue[👉 Click to create yours here]", key="to_signup"):
+        if st.button(":green[👉 Click to create yours here]", key="to_signup"):
             st.session_state.show_login = False
             st.session_state.show_signup = True
             st.rerun()
@@ -577,10 +577,145 @@ def show_login_dialog():
 
 
 
+# @st.dialog("📝 Register here", width="small")
+# def show_signup_dialog():
+#     import time
+#     from datetime import datetime
+#     st.markdown(
+#         """
+#         <style>
+#         .tight-label {
+#             color: #1E90FF;
+#             font-weight: 250;
+#             padding: 0px;
+#             margin: 0px;
+#             line-height: 0.5;
+#             display: block;
+#             font-style: Times New Roman;
+#         }
+#         /* Pull inputs closer to labels */
+#         .stTextInput > div > div > input,
+#         .stNumberInput > div > div > input,
+#         .stTextArea > div > div > textarea,
+#         .stSelectbox > div > div > div {
+#             margin-top: -5px !important;
+#         }
+#         </style>
+#         """,
+#         unsafe_allow_html=True
+#     )
+
+#     # --- Form ---
+#     with st.form("signup_form"):
+#         # Role selection
+#         st.markdown('<span class="tight-label">Select Role</span>', unsafe_allow_html=True)
+#         role = st.selectbox("", ["Select role ..", "Student", "Parent", "Teacher", "Therapist", "Admin", "Admin2"])
+#         if role == "Student":
+#             st.markdown('<span class="tight-label">First Name</span>', unsafe_allow_html=True)
+#             first_name = st.text_input("", key="first_name")
+#             st.markdown('<span class="tight-label">Last Name</span>', unsafe_allow_html=True)
+#             last_name = st.text_input("", key="last_name")
+#             full_name = f"{first_name.strip()} {last_name.strip()}"
+#         else:
+#             st.markdown('<span class="tight-label">Full Name</span>', unsafe_allow_html=True)
+#             full_name = st.text_input("", key="full_name")
+#             first_name = last_name = None
+
+#         # Account info
+#         st.markdown('<span class="tight-label">Username</span>', unsafe_allow_html=True)
+#         username = st.text_input("", key="username")
+#         st.markdown('<span class="tight-label">Email</span>', unsafe_allow_html=True)
+#         email = st.text_input("", key="email")
+#         st.markdown('<span class="tight-label">Password</span>', unsafe_allow_html=True)
+#         password = st.text_input("", type="password", key="password")
+#         st.markdown('<span class="tight-label">Confirm Password</span>', unsafe_allow_html=True)
+#         confirm_password = st.text_input("", type="password", key="confirm_password")
+
+#         # Conditional fields
+#         sex = age = class_ = stream = parent_guardian = profession = address = contact = None
+#         if role == "Student":
+#             st.markdown('<span class="tight-label">Sex</span>', unsafe_allow_html=True)
+#             sex = st.selectbox("", ["Male", "Female", "Other"])
+#             st.markdown('<span class="tight-label">Age</span>', unsafe_allow_html=True)
+#             age = st.number_input("", 3, 100, step=1)
+#             st.markdown('<span class="tight-label">Class</span>', unsafe_allow_html=True)
+#             class_ = st.text_input("", key="class_")
+#             st.markdown('<span class="tight-label">Stream</span>', unsafe_allow_html=True)
+#             stream = st.text_input("", key="stream")
+#             st.markdown('<span class="tight-label">Parent/Guardian</span>', unsafe_allow_html=True)
+#             parent_guardian = st.text_input("", key="parent_guardian")
+#             st.markdown('<span class="tight-label">Address</span>', unsafe_allow_html=True)
+#             address = st.text_area("", key="address")
+#             st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
+#             contact = st.text_input("", key="contact")
+#         elif role in ["Parent", "Teacher"]:
+#             st.markdown('<span class="tight-label">Address</span>', unsafe_allow_html=True)
+#             address = st.text_area("", key="address")
+#             st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
+#             contact = st.text_input("", key="contact")
+#         elif role == "Therapist":
+#             st.markdown('<span class="tight-label">Profession</span>', unsafe_allow_html=True)
+#             profession = st.text_input("", key="profession")
+#             st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
+#             contact = st.text_input("", key="contact")
+
+#         # Submit button
+#         submitted = st.form_submit_button(":green[Create Account]")
+#         if submitted:
+#             # Validation
+#             missing = []
+#             base_fields = [(username, "Username"), (email, "Email"),
+#                            (password, "Password"), (confirm_password, "Confirm Password")]
+#             if role == "Student":
+#                 base_fields += [(first_name, "First Name"), (last_name, "Last Name")]
+#             else:
+#                 base_fields += [(full_name, "Full Name")]
+#             missing += [label for val, label in base_fields if not val]
+#             if role == "Select role ..": missing.append("Role")
+#             if role == "Student":
+#                 if not sex: missing.append("Sex")
+#                 if not age: missing.append("Age")
+#                 if not class_: missing.append("Class")
+#                 if not stream: missing.append("Stream")
+#                 if not parent_guardian: missing.append("Parent/Guardian")
+#                 if not address: missing.append("Address")
+#                 if not contact: missing.append("Phone")
+#             elif role in ["Parent", "Teacher"]:
+#                 if not address: missing.append("Address")
+#                 if not contact: missing.append("Phone")
+#             elif role == "Therapist":
+#                 if not profession: missing.append("Profession")
+#                 if not contact: missing.append("Phone")
+
+#             if missing:
+#                 st.warning(f"⚠️ Please fill in: **{', '.join(missing)}**")
+#             elif password != confirm_password:
+#                 st.warning("⚠️ Passwords do not match.")
+#             else:
+#                 st.success("✅ Account created successfully!")
+#                 with st.spinner("Redirecting to login..."):
+#                     time.sleep(2)
+#                 st.session_state.show_signup = False
+#                 st.session_state.show_login = True
+#                 st.rerun()
+
+#     # --- Login link outside form ---
+#     col1, col2 = st.columns([3, 2])
+#     with col1:
+#         st.markdown(":orange[Already have an account?]")
+#     with col2:
+#         if st.button(":blue[👉 Go to Login]", key="to_login"):
+#             st.session_state.show_signup = False
+#             st.session_state.show_login = True
+#             st.rerun()
+
+
 @st.dialog("📝 Register here", width="small")
 def show_signup_dialog():
     import time
     from datetime import datetime
+
+    # --- CSS for tight labels ---
     st.markdown(
         """
         <style>
@@ -593,7 +728,6 @@ def show_signup_dialog():
             display: block;
             font-style: Times New Roman;
         }
-        /* Pull inputs closer to labels */
         .stTextInput > div > div > input,
         .stNumberInput > div > div > input,
         .stTextArea > div > div > textarea,
@@ -605,99 +739,105 @@ def show_signup_dialog():
         unsafe_allow_html=True
     )
 
-    # --- Form ---
-    with st.form("signup_form"):
-        # Role selection
-        st.markdown('<span class="tight-label">Select Role</span>', unsafe_allow_html=True)
-        role = st.selectbox("", ["Select role ..", "Student", "Parent", "Teacher", "Therapist", "Admin", "Admin2"])
-        if role == "Student":
-            st.markdown('<span class="tight-label">First Name</span>', unsafe_allow_html=True)
-            first_name = st.text_input("", key="first_name")
-            st.markdown('<span class="tight-label">Last Name</span>', unsafe_allow_html=True)
-            last_name = st.text_input("", key="last_name")
-            full_name = f"{first_name.strip()} {last_name.strip()}"
-        else:
-            st.markdown('<span class="tight-label">Full Name</span>', unsafe_allow_html=True)
-            full_name = st.text_input("", key="full_name")
-            first_name = last_name = None
+    # --- Role selection outside the form ---
+    st.markdown('<span class="tight-label">Select Role</span>', unsafe_allow_html=True)
+    role = st.selectbox("", ["Select role ..", "Student", "Parent", "Teacher", "Therapist", "Admin", "Admin2"])
 
-        # Account info
-        st.markdown('<span class="tight-label">Username</span>', unsafe_allow_html=True)
-        username = st.text_input("", key="username")
-        st.markdown('<span class="tight-label">Email</span>', unsafe_allow_html=True)
-        email = st.text_input("", key="email")
-        st.markdown('<span class="tight-label">Password</span>', unsafe_allow_html=True)
-        password = st.text_input("", type="password", key="password")
-        st.markdown('<span class="tight-label">Confirm Password</span>', unsafe_allow_html=True)
-        confirm_password = st.text_input("", type="password", key="confirm_password")
+    if role != "Select role ..":
+        # --- Form for account info and role-specific fields ---
+        with st.form("signup_form"):
+            # Initialize fields
+            first_name = last_name = full_name = username = email = password = confirm_password = None
+            sex = age = class_ = stream = parent_guardian = profession = address = contact = None
 
-        # Conditional fields
-        sex = age = class_ = stream = parent_guardian = profession = address = contact = None
-        if role == "Student":
-            st.markdown('<span class="tight-label">Sex</span>', unsafe_allow_html=True)
-            sex = st.selectbox("", ["Male", "Female", "Other"])
-            st.markdown('<span class="tight-label">Age</span>', unsafe_allow_html=True)
-            age = st.number_input("", 3, 100, step=1)
-            st.markdown('<span class="tight-label">Class</span>', unsafe_allow_html=True)
-            class_ = st.text_input("", key="class_")
-            st.markdown('<span class="tight-label">Stream</span>', unsafe_allow_html=True)
-            stream = st.text_input("", key="stream")
-            st.markdown('<span class="tight-label">Parent/Guardian</span>', unsafe_allow_html=True)
-            parent_guardian = st.text_input("", key="parent_guardian")
-            st.markdown('<span class="tight-label">Address</span>', unsafe_allow_html=True)
-            address = st.text_area("", key="address")
-            st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
-            contact = st.text_input("", key="contact")
-        elif role in ["Parent", "Teacher"]:
-            st.markdown('<span class="tight-label">Address</span>', unsafe_allow_html=True)
-            address = st.text_area("", key="address")
-            st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
-            contact = st.text_input("", key="contact")
-        elif role == "Therapist":
-            st.markdown('<span class="tight-label">Profession</span>', unsafe_allow_html=True)
-            profession = st.text_input("", key="profession")
-            st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
-            contact = st.text_input("", key="contact")
-
-        # Submit button
-        submitted = st.form_submit_button(":green[Create Account]")
-        if submitted:
-            # Validation
-            missing = []
-            base_fields = [(username, "Username"), (email, "Email"),
-                           (password, "Password"), (confirm_password, "Confirm Password")]
+            # --- Role-dependent fields ---
             if role == "Student":
-                base_fields += [(first_name, "First Name"), (last_name, "Last Name")]
-            else:
-                base_fields += [(full_name, "Full Name")]
-            missing += [label for val, label in base_fields if not val]
-            if role == "Select role ..": missing.append("Role")
-            if role == "Student":
-                if not sex: missing.append("Sex")
-                if not age: missing.append("Age")
-                if not class_: missing.append("Class")
-                if not stream: missing.append("Stream")
-                if not parent_guardian: missing.append("Parent/Guardian")
-                if not address: missing.append("Address")
-                if not contact: missing.append("Phone")
+                st.markdown('<span class="tight-label">First Name</span>', unsafe_allow_html=True)
+                first_name = st.text_input("", key="first_name")
+                st.markdown('<span class="tight-label">Last Name</span>', unsafe_allow_html=True)
+                last_name = st.text_input("", key="last_name")
+                full_name = f"{first_name.strip()} {last_name.strip()}" if first_name and last_name else ""
+
+                st.markdown('<span class="tight-label">Sex</span>', unsafe_allow_html=True)
+                sex = st.selectbox("", ["Male", "Female", "Other"])
+                st.markdown('<span class="tight-label">Age</span>', unsafe_allow_html=True)
+                age = st.number_input("", 3, 100, step=1)
+                st.markdown('<span class="tight-label">Class</span>', unsafe_allow_html=True)
+                class_ = st.text_input("", key="class_")
+                st.markdown('<span class="tight-label">Stream</span>', unsafe_allow_html=True)
+                stream = st.text_input("", key="stream")
+                st.markdown('<span class="tight-label">Parent/Guardian</span>', unsafe_allow_html=True)
+                parent_guardian = st.text_input("", key="parent_guardian")
+                st.markdown('<span class="tight-label">Address</span>', unsafe_allow_html=True)
+                address = st.text_area("", key="address")
+                st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
+                contact = st.text_input("", key="contact")
+
             elif role in ["Parent", "Teacher"]:
-                if not address: missing.append("Address")
-                if not contact: missing.append("Phone")
-            elif role == "Therapist":
-                if not profession: missing.append("Profession")
-                if not contact: missing.append("Phone")
+                st.markdown('<span class="tight-label">Full Name</span>', unsafe_allow_html=True)
+                full_name = st.text_input("", key="full_name")
+                st.markdown('<span class="tight-label">Address</span>', unsafe_allow_html=True)
+                address = st.text_area("", key="address")
+                st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
+                contact = st.text_input("", key="contact")
 
-            if missing:
-                st.warning(f"⚠️ Please fill in: **{', '.join(missing)}**")
-            elif password != confirm_password:
-                st.warning("⚠️ Passwords do not match.")
-            else:
-                st.success("✅ Account created successfully!")
-                with st.spinner("Redirecting to login..."):
-                    time.sleep(2)
-                st.session_state.show_signup = False
-                st.session_state.show_login = True
-                st.rerun()
+            elif role == "Therapist":
+                st.markdown('<span class="tight-label">Full Name</span>', unsafe_allow_html=True)
+                full_name = st.text_input("", key="full_name")
+                st.markdown('<span class="tight-label">Profession</span>', unsafe_allow_html=True)
+                profession = st.text_input("", key="profession")
+                st.markdown('<span class="tight-label">Phone</span>', unsafe_allow_html=True)
+                contact = st.text_input("", key="contact")
+
+            elif role in ["Admin", "Admin2"]:
+                st.markdown('<span class="tight-label">Full Name</span>', unsafe_allow_html=True)
+                full_name = st.text_input("", key="full_name")
+
+            # --- Common account info ---
+            st.markdown('<span class="tight-label">Username</span>', unsafe_allow_html=True)
+            username = st.text_input("", key="username")
+            st.markdown('<span class="tight-label">Email</span>', unsafe_allow_html=True)
+            email = st.text_input("", key="email")
+            st.markdown('<span class="tight-label">Password</span>', unsafe_allow_html=True)
+            password = st.text_input("", type="password", key="password")
+            st.markdown('<span class="tight-label">Confirm Password</span>', unsafe_allow_html=True)
+            confirm_password = st.text_input("", type="password", key="confirm_password")
+
+            # --- Submit button ---
+            submitted = st.form_submit_button(":green[Create Account]")
+            if submitted:
+                missing = []
+                base_fields = [(username, "Username"), (email, "Email"),
+                               (password, "Password"), (confirm_password, "Confirm Password")]
+                if role == "Student":
+                    base_fields += [(first_name, "First Name"), (last_name, "Last Name")]
+                else:
+                    base_fields += [(full_name, "Full Name")]
+                missing += [label for val, label in base_fields if not val]
+
+                if role == "Student":
+                    for fld, lbl in [(sex, "Sex"), (age, "Age"), (class_, "Class"),
+                                     (stream, "Stream"), (parent_guardian, "Parent/Guardian"),
+                                     (address, "Address"), (contact, "Phone")]:
+                        if not fld: missing.append(lbl)
+                elif role in ["Parent", "Teacher"]:
+                    for fld, lbl in [(address, "Address"), (contact, "Phone")]:
+                        if not fld: missing.append(lbl)
+                elif role == "Therapist":
+                    for fld, lbl in [(profession, "Profession"), (contact, "Phone")]:
+                        if not fld: missing.append(lbl)
+
+                if missing:
+                    st.warning(f"⚠️ Please fill in: **{', '.join(missing)}**")
+                elif password != confirm_password:
+                    st.warning("⚠️ Passwords do not match.")
+                else:
+                    st.success("✅ Account created successfully!")
+                    with st.spinner("Redirecting to login..."):
+                        time.sleep(2)
+                    st.session_state.show_signup = False
+                    st.session_state.show_login = True
+                    st.rerun()
 
     # --- Login link outside form ---
     col1, col2 = st.columns([3, 2])
@@ -708,6 +848,4 @@ def show_signup_dialog():
             st.session_state.show_signup = False
             st.session_state.show_login = True
             st.rerun()
-
-
 

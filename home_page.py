@@ -169,6 +169,9 @@ else:
 #         }}
 #         </style>
 #     """
+
+
+
 import streamlit as st
 import base64
 
@@ -183,8 +186,8 @@ dark_css = """
 
 /* Inputs, buttons */
 input, textarea, select, button, .stButton button {
-    background-color: #333333;
-    color: #FFFFFF !important;
+    background-color: brown;
+    color: orange;
     border-color: #555555 !important;
 }
 
@@ -263,9 +266,6 @@ def set_custom_background(bg_color="#121212", sidebar_img_path=None, sidebar_wid
 
 
 
-
-
-
 @st.cache_data
 def get_img_as_base64(file):
     with open(file, "rb") as f:
@@ -314,7 +314,7 @@ def feedback_dialog():
         <h4 style='color:skyblue;font-size:25px;'>We're here to listen.</h4>
         <p style='font-size:20px;'>Your thoughts help build a better mental health experience for everyone.</p>
     """, unsafe_allow_html=True)
-    feedback = st.text_area("Your message:", height=200, placeholder="I feel...")
+    feedback = st.text_area("Your message:", height=150, placeholder="I feel...")
     if st.button("✅ Submit"):
         if feedback.strip():
             st.session_state["feedback_response"] = feedback
@@ -622,10 +622,7 @@ def main():
 
     auth.create_users_db() 
     if st.session_state.get("logged_in"):
-        # set_custom_background(bg_color=None, sidebar_img=img, sidebar_width='350px')
-        # set_custom_background(bg_color="#121212", sidebar_img_path='images/IMG.webp')
         set_custom_background(bg_color="#121212", sidebar_img_path='images/IMG.webp', sidebar_width="350px")
-
         
         first_name = get_fisrt_name_from_username(st.session_state.user_name)
         st.sidebar.success(f"👋 Welcome, {first_name}")
