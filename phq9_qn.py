@@ -1,14 +1,8 @@
 DB_PATH = "users_db.db"
 import streamlit as st
-import json
+import sqlite3
 from datetime import datetime
-
-try:
-    import mysql.connector
-    from db_connection import get_mysql_connection
-except ImportError as e:
-    st.error(f"Required module missing: {e}")
-    raise
+import json
 
 phq9_questions = [
     "Little interest or pleasure in doing things",
@@ -31,44 +25,43 @@ response_map = {
 
 def create_connection():
     try:
-        db = get_mysql_connection()
+        db = sqlite3.connect(DB_PATH)
+        db.row_factory = sqlite3.Row
         return db
-    except mysql.connector.Error as e:
-        st.error(f"Failed to connect to MySQL DB: {e}")
+    except sqlite3.Error as e:
+        st.error(f"Failed to connect to SQLite DB: {e}")
         return None
 
 def create_phq9_table(db):
-    cursor = db.cursor()
-    cursor.execute("""
+    db.execute("""
         CREATE TABLE IF NOT EXISTS PHQ9_forms (
-            appointment_id VARCHAR(255) PRIMARY KEY,
-            user_id VARCHAR(255),
-            client_name VARCHAR(255),
-            client_type VARCHAR(100),
-            screen_type VARCHAR(100),
-            phq9_score INT,
-            depression_status VARCHAR(50),
-            suicide_response INT,
-            suicide_risk VARCHAR(50),
+            appointment_id TEXT PRIMARY KEY,
+            user_id TEXT,
+            client_name TEXT,
+            client_type TEXT,
+            screen_type TEXT,
+            phq9_score INTEGER,
+            depression_status TEXT,
+            suicide_response INTEGER,
+            suicide_risk TEXT,
             responses_dict TEXT,
-            assessment_date DATETIME,
-            assessed_by VARCHAR(255) DEFAULT 'SELF',
-            FOREIGN KEY (appointment_id) REFERENCES appointments(appointment_id)
+            assessment_date TEXT,
+            assessed_by TEXT DEFAULT 'SELF',
+            FOREIGN KEY(appointment_id) REFERENCES appointments(appointment_id)
         )
     """)
     db.commit()
-    cursor.close()
 
 def check_existing_entry(db, appointment_id):
     try:
         cursor = db.cursor()
-        cursor.execute("SELECT COUNT(*) FROM PHQ9_forms WHERE appointment_id = %s", (appointment_id,))
-        exists = cursor.fetchone()[0] > 0
-        cursor.close()
-        return exists
+        cursor.execute("SELECT COUNT(*) FROM PHQ9_forms WHERE appointment_id = ?", (appointment_id,))
+        return cursor.fetchone()[0] > 0
     except Exception as e:
         st.error(f"Error checking existing PHQ-9 entry: {e}")
         return False
+    finally:
+        cursor.close()
 
 def calculate_phq9_score(responses):
     return sum(response_map.get(r["response"], 0) for r in responses)
@@ -105,7 +98,7 @@ def insert_into_phq9_forms(db, appointment_id, user_id, client_name, client_type
             INSERT INTO PHQ9_forms (
                 appointment_id, user_id, client_name, client_type, screen_type,
                 phq9_score, depression_status, responses_dict, assessment_date, assessed_by
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             appointment_id, user_id, client_name, client_type, screen_type,
             phq9_score, depression_status, json.dumps(responses_dict), assessment_date, assessed_by
@@ -120,23 +113,24 @@ def insert_into_phq9_forms(db, appointment_id, user_id, client_name, client_type
 
 def fetch_appointment_data(db, appointment_id):
     try:
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor()
         cursor.execute("""
             SELECT appointment_id, user_id, name AS client_name,
                    client_type, screen_type, created_by
             FROM appointments
-            WHERE appointment_id = %s AND actions LIKE '%"screen": true%'
+            WHERE appointment_id = ? AND actions LIKE '%"screen": true%'
             LIMIT 1
         """, (appointment_id,))
         row = cursor.fetchone()
-        cursor.close()
         if not row:
             st.warning(f"No screening data found for appointment ID: {appointment_id}")
             return {}
-        return row
+        return dict(row)
     except Exception as e:
         st.error(f"Error fetching appointment data: {e}")
         return {}
+    finally:
+        cursor.close()
 
 def capture_phq9_responses():
     responses = []
