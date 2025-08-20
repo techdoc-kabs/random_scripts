@@ -1,10 +1,12 @@
 DB_PATH = "users_db.db"
 
+DB_PATH = "users_db.db"
+
 import streamlit as st
 import pandas as pd
 import sqlite3
 
-import bcrypt
+import hashlib
 import smtplib
 from email.mime.text import MIMEText
 from streamlit_option_menu import option_menu
@@ -12,7 +14,7 @@ import random
 import string
 import time
 
-DB_NAME = "users_db.db"
+DB_PATH = "users_db.db"
 
 from datetime import datetime
 
@@ -20,7 +22,7 @@ def add_student(first, last, contact, email, username, password, class_, stream,
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+    pw_hash = hashlib.sha256(password.encode()).hexdigest()
     user_id = generate_user_id("Student")  # Generate unique ID
 
     try:
@@ -55,7 +57,7 @@ def authenticate_user(username, password):
 
     if row:
         stored_hash, first_name = row
-        if bcrypt.checkpw(password.encode(), stored_hash.encode()):
+        if hashlib.sha256(password.encode()).hexdigest() == stored_hash:
             return True, first_name
     return False, None
 
@@ -63,7 +65,7 @@ def authenticate_user(username, password):
 def update_password(username, new_password):
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
-    new_hash = bcrypt.hashpw(new_password.encode(), bcrypt.gensalt()).decode()
+    new_hash = hashlib.sha256(new_password.encode()).hexdigest()
     conn.execute("UPDATE users SET password_hash = ? WHERE username = ?", (new_hash, username))
     conn.commit()
     conn.close()
@@ -209,6 +211,9 @@ def generate_user_id(role):
     next_num = int(row[0].split("-")[-1]) + 1 if row else 1
     return f"{prefix}-{today}-{next_num:04d}"
 
+
+
+
 def main():
     st.markdown("""
             <style>
@@ -243,7 +248,7 @@ def main():
                     contact=str(row.get('contact', '')).strip(),
                     email=str(row.get('email', '')).strip(),
                     username=f"{str(row.get('first_name', '')).strip().lower()}@{str(row.get('last_name', '')).strip().lower()}",
-                    password="passme",
+                    password="password",
                     class_=str(row.get('class', '')),
                     stream=str(row.get('stream', '')),
                     sex=str(row.get('sex', '')),
