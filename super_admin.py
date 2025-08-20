@@ -6,11 +6,7 @@ import base64, os
 from datetime import datetime
 import pandas as pd
 
-from pathlib import Path
-
-DB_PATH = Path(__file__).parent / ".streamlit" / "users_db.db"
-DB_PATH.parent.mkdir(parents=True, exist_ok=True)  # ensure folder exists
-
+DB_PATH = "users_db.db"
 def create_connection():
     db = sqlite3.connect(DB_PATH)
     db.row_factory = sqlite3.Row
@@ -245,8 +241,8 @@ def show_users_table():
                     new_name = st.text_input("Full Name", value=user["full_name"])
                     new_email = st.text_input("Email", value=user["email"])
                     new_username = st.text_input("Username", value=user["username"])
-                    new_role = st.selectbox("Role", ["Admin", "Therapist", 'Teacher',"Admin2",'Student'],
-                                            index=["Admin", "Therapist", 'Teacher',"Admin2",'Student'].index(user["role"]))
+                    new_role = st.selectbox("Role", ["Admin", "Therapist", 'Teacher',"Admin2",'Student', 'Parent'],
+                                            index=["Admin", "Therapist", 'Teacher',"Admin2",'Student','Parent'].index(user["role"]))
                     submitted = st.form_submit_button("Update User")
                     if submitted:
                         try:
@@ -333,4 +329,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
