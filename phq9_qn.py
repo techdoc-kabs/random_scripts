@@ -1,11 +1,15 @@
 DB_PATH = "users_db.db"
 import streamlit as st
-import sqlite3
-
 import json
 from datetime import datetime
 
-# PHQ-9 questions
+try:
+    import mysql.connector
+    from db_connection import get_mysql_connection
+except ImportError as e:
+    st.error(f"Required module missing: {e}")
+    raise
+
 phq9_questions = [
     "Little interest or pleasure in doing things",
     "Feeling down, depressed, or hopeless",
@@ -26,43 +30,45 @@ response_map = {
 }
 
 def create_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    
-    return conn
+    try:
+        db = get_mysql_connection()
+        return db
+    except mysql.connector.Error as e:
+        st.error(f"Failed to connect to MySQL DB: {e}")
+        return None
 
-def create_PHQ9_forms_table(db):
-    db.execute("""
+def create_phq9_table(db):
+    cursor = db.cursor()
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS PHQ9_forms (
-            appointment_id    TEXT PRIMARY KEY,
-            user_id           TEXT,
-            name              TEXT,
-            client_type       TEXT,
-            screen_type       TEXT,
-            phq9_score      INTEGER,
-            suicide_response  INTEGER,
-            suicide_risk      TEXT,
-            depression_status  TEXT,
-            responses_dict    TEXT,
-            assessment_date   TEXT,
-            assessed_by       TEXT DEFAULT 'SELF',
-            FOREIGN KEY(appointment_id) REFERENCES appointments(appointment_id)
+            appointment_id VARCHAR(255) PRIMARY KEY,
+            user_id VARCHAR(255),
+            client_name VARCHAR(255),
+            client_type VARCHAR(100),
+            screen_type VARCHAR(100),
+            phq9_score INT,
+            depression_status VARCHAR(50),
+            suicide_response INT,
+            suicide_risk VARCHAR(50),
+            responses_dict TEXT,
+            assessment_date DATETIME,
+            assessed_by VARCHAR(255) DEFAULT 'SELF',
+            FOREIGN KEY (appointment_id) REFERENCES appointments(appointment_id)
         )
     """)
     db.commit()
-
-
+    cursor.close()
 
 def check_existing_entry(db, appointment_id):
     try:
         cursor = db.cursor()
-        cursor.execute("SELECT COUNT(*) FROM PHQ9_forms WHERE appointment_id = ?", (appointment_id,))
-        return cursor.fetchone()[0] > 0
+        cursor.execute("SELECT COUNT(*) FROM PHQ9_forms WHERE appointment_id = %s", (appointment_id,))
+        exists = cursor.fetchone()[0] > 0
+        cursor.close()
+        return exists
     except Exception as e:
         st.error(f"Error checking existing PHQ-9 entry: {e}")
         return False
-    finally:
-        cursor.close()
 
 def calculate_phq9_score(responses):
     return sum(response_map.get(r["response"], 0) for r in responses)
@@ -76,23 +82,8 @@ def interpret_phq9_score(score):
         return "Moderate depression"
     elif score >= 5:
         return "Mild depression"
-    elif score >= 1:
+    else:
         return "Minimal depression"
-    else:
-        return "No depression"
-
-def get_suicide_metrics(responses_dict):
-    q9 = next((r for r in responses_dict if r["question_id"] == "Q9"), None)
-    suicide_response_val = q9["response_value"] if q9 else -1
-    if suicide_response_val == 0:
-        risk = "Low risk"
-    elif suicide_response_val == 1:
-        risk = "Moderate risk"
-    elif suicide_response_val >= 2:
-        risk = "High risk"
-    else:
-        risk = "Unknown"
-    return suicide_response_val, risk
 
 def generate_responses_dict(responses):
     return [
@@ -105,31 +96,49 @@ def generate_responses_dict(responses):
         for entry in responses
     ]
 
-def insert_into_PHQ9_forms(db, appointment_id, user_id, name, client_type,
-                           screen_type, phq9_score, suicide_response, suicide_risk,
-                           depression_status, responses_dict, assessment_date, assessed_by):
+def insert_into_phq9_forms(db, appointment_id, user_id, client_name, client_type,
+                           screen_type, phq9_score, depression_status, responses_dict,
+                           assessment_date, assessed_by):
     try:
         cursor = db.cursor()
         cursor.execute("""
             INSERT INTO PHQ9_forms (
-                appointment_id, user_id, name, client_type, screen_type,
-                phq9_score, suicide_response, suicide_risk, depression_status,
-                responses_dict, assessment_date, assessed_by
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                appointment_id, user_id, client_name, client_type, screen_type,
+                phq9_score, depression_status, responses_dict, assessment_date, assessed_by
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (
-            appointment_id, user_id, name, client_type, screen_type,
-            phq9_score, suicide_response, suicide_risk, depression_status,
-            json.dumps(responses_dict), assessment_date, assessed_by
+            appointment_id, user_id, client_name, client_type, screen_type,
+            phq9_score, depression_status, json.dumps(responses_dict), assessment_date, assessed_by
         ))
         db.commit()
-        st.success("PHQ-9 response submitted successfully!")
+        st.success("PHQ-9 responses submitted successfully!")
     except Exception as e:
         db.rollback()
-        st.error(f"❌ Could not insert PHQ-9 responses: {e}")
+        st.error(f"An error occurred saving PHQ-9 responses: {e}")
     finally:
         cursor.close()
 
-def capture_PHQ_9_responses():
+def fetch_appointment_data(db, appointment_id):
+    try:
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT appointment_id, user_id, name AS client_name,
+                   client_type, screen_type, created_by
+            FROM appointments
+            WHERE appointment_id = %s AND actions LIKE '%"screen": true%'
+            LIMIT 1
+        """, (appointment_id,))
+        row = cursor.fetchone()
+        cursor.close()
+        if not row:
+            st.warning(f"No screening data found for appointment ID: {appointment_id}")
+            return {}
+        return row
+    except Exception as e:
+        st.error(f"Error fetching appointment data: {e}")
+        return {}
+
+def capture_phq9_responses():
     responses = []
     answered = set()
     with st.form("PHQ-9"):
@@ -141,7 +150,7 @@ def capture_PHQ_9_responses():
                 label="",
                 options=["Not Selected", "Not at all", "Several Days", "More Than Half the Days", "Nearly Every Day"],
                 index=0,
-                key=f"q{i}_{st.session_state.get('appointment_id', 'default')}_{st.session_state.get('unique_session_key', 'default')}"
+                key=f"phq9_q{i}_{st.session_state.get('appointment_id', 'default')}_{st.session_state.get('unique_session_key', 'default')}"
             )
             responses.append({'question': f'Q{i}', 'response': selected})
             if selected != "Not Selected":
@@ -153,120 +162,37 @@ def capture_PHQ_9_responses():
                 return None
             return responses
 
-def fetch_screen_data_by_appointment_id(db, appointment_id):
-    try:
-        cursor = db.cursor()
-        cursor.execute("""
-            SELECT appointment_id, user_id, name, client_type, screen_type, created_by, screening_tools
-            FROM appointments
-            WHERE appointment_id = ?
-            AND actions LIKE '%"screen": true%'
-            LIMIT 1
-        """, (appointment_id,))
-        row = cursor.fetchone()
-        if not row:
-            st.warning(f"No screening data found for appointment ID: {appointment_id}")
-            return {}
-        return {
-            "appointment_id": row["appointment_id"],
-            "user_id": row["user_id"],
-            "name": row["name"],
-            "client_type": row["client_type"],
-            "screen_type": row["screen_type"],
-            "created_by": row["created_by"],
-        }
-    except Exception as e:
-        st.error(f"Error fetching appointment data: {e}")
-        return {}
-    finally:
-        cursor.close()
-
-
-def fetch_screen_data_by_appointment_id(db, appointment_id):
-    if not appointment_id:
-        st.warning("No appointment ID provided to fetch screening data.")
-        return {}
-
-    try:
-        cursor = db.cursor()
-        cursor.execute("""
-            SELECT appointment_id, user_id, name, client_type, screen_type, created_by, screening_tools, actions
-            FROM appointments
-            WHERE appointment_id = ?
-            LIMIT 1
-        """, (appointment_id,))
-        row = cursor.fetchone()
-
-        if not row:
-            st.warning(f"No appointment found for ID: {appointment_id}")
-            return {}
-
-        # Parse actions JSON
-        actions_raw = row["actions"] if "actions" in row.keys() else None
-        try:
-            actions = json.loads(actions_raw) if actions_raw else {}
-        except:
-            actions = {}
-
-        # Check if screening exists in any form
-        if "screen" not in actions:
-            st.warning(f"No screening action found for appointment ID: {appointment_id}")
-            return {}
-
-        # Return clean data
-        return {
-            "appointment_id": row["appointment_id"],
-            "user_id": row["user_id"],
-            "name": row["name"],
-            "client_type": row["client_type"],
-            "screen_type": row["screen_type"],
-            "created_by": row["created_by"],
-            "screening_tools": row["screening_tools"],
-            "actions": actions
-        }
-
-    except Exception as e:
-        st.error(f"Error fetching appointment data: {e}")
-        return {}
-
-    finally:
-        cursor.close()
-
 def main():
     db = create_connection()
-    create_PHQ9_forms_table(db)
+    if not db:
+        st.stop()
+    create_phq9_table(db)
 
     appointment_id = st.session_state.get("appointment_id")
     if not appointment_id:
-        st.error("No appointment ID found in session.")
+        st.error("No appointment ID found in session state.")
         st.stop()
 
-    data = fetch_screen_data_by_appointment_id(db, appointment_id)
-    if not data:
+    metadata = fetch_appointment_data(db, appointment_id)
+    if not metadata:
         st.stop()
 
-    user_id = data["user_id"]
-    name = data["name"]
-    client_type = data["client_type"]
-    screen_type = data["screen_type"]
-    assessed_by = data.get("created_by", "SELF")
+    if check_existing_entry(db, appointment_id):
+        st.warning("PHQ-9 responses already submitted for this appointment.")
+        return
 
-    responses = capture_PHQ_9_responses()
+    responses = capture_phq9_responses()
     if responses:
-        if check_existing_entry(db, appointment_id):
-            st.warning("An entry for this appointment already exists.")
-            return
-
         responses_dict = generate_responses_dict(responses)
         phq9_score = calculate_phq9_score(responses)
         depression_status = interpret_phq9_score(phq9_score)
-        suicide_response, suicide_risk = get_suicide_metrics(responses_dict)
         assessment_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        insert_into_PHQ9_forms(
-            db, appointment_id, user_id, name, client_type,
-            screen_type, phq9_score, suicide_response, suicide_risk,
-            depression_status, responses_dict, assessment_date, assessed_by
+        insert_into_phq9_forms(
+            db, appointment_id, metadata["user_id"], metadata["client_name"],
+            metadata["client_type"], metadata["screen_type"],
+            phq9_score, depression_status, responses_dict,
+            assessment_date, metadata["created_by"]
         )
 
     db.close()
