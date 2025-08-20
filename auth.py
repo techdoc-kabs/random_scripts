@@ -1,7 +1,4 @@
 
-
-
-
 # import streamlit as st
 # import sqlite3
 # import hashlib
@@ -748,13 +745,10 @@ import time
 from pushbullet import Pushbullet
 from datetime import datetime
 from pathlib import Path
-
-
 API_KEY = st.secrets["push_API_KEY"]
-
 from pathlib import Path
-DB_PATH = Path(__file__).parent / ".streamlit" / "users_db.db"
-DB_PATH.parent.mkdir(parents=True, exist_ok=True) 
+DB_PATH = "users_db.db"
+
 
 
 dark_css = """
@@ -891,7 +885,7 @@ def create_users_db():
         )
         """)
 
-create_users_db()
+# create_users_db()
 
 # ---------- INSERT USER ----------
 def insert_user(data):
@@ -1286,5 +1280,6 @@ def show_signup_dialog():
             st.session_state.show_signup = False
             st.session_state.show_login = True
             st.rerun()
+
 
 
