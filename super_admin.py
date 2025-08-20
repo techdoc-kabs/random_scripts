@@ -6,7 +6,11 @@ import base64, os
 from datetime import datetime
 import pandas as pd
 
-DB_PATH = "users_db.db"
+from pathlib import Path
+
+DB_PATH = Path(__file__).parent / ".streamlit" / "users_db.db"
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)  # ensure folder exists
+
 def create_connection():
     db = sqlite3.connect(DB_PATH)
     db.row_factory = sqlite3.Row
@@ -329,3 +333,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
