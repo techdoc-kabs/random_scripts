@@ -753,9 +753,9 @@ from pathlib import Path
 API_KEY = st.secrets["push_API_KEY"]
 
 from pathlib import Path
+DB_PATH = Path(__file__).parent / ".streamlit" / "users_db.db"
+DB_PATH.parent.mkdir(parents=True, exist_ok=True) 
 
-# Points to the DB inside your repository folder
-DB_PATH = Path(__file__).parent / "users_db.db"
 
 dark_css = """
 <style>
@@ -1286,4 +1286,5 @@ def show_signup_dialog():
             st.session_state.show_signup = False
             st.session_state.show_login = True
             st.rerun()
+
 
