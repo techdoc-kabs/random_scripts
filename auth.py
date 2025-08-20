@@ -749,9 +749,13 @@ from pushbullet import Pushbullet
 from datetime import datetime
 from pathlib import Path
 
-DB_PATH = Path("users_db.db")
+
 API_KEY = st.secrets["push_API_KEY"]
 
+from pathlib import Path
+
+# Points to the DB inside your repository folder
+DB_PATH = Path(__file__).parent / "users_db.db"
 
 dark_css = """
 <style>
@@ -853,6 +857,14 @@ def create_connection():
 
 pb = get_pushbullet()
 
+
+# ---------- CONNECTION ----------
+def create_connection():
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
+    conn.row_factory = sqlite3.Row  # So results behave like dicts
+    return conn
+
+# ---------- USERS TABLE ----------
 def create_users_db():
     with create_connection() as conn:
         conn.execute("""
@@ -879,6 +891,31 @@ def create_users_db():
         )
         """)
 
+create_users_db()
+
+# ---------- INSERT USER ----------
+def insert_user(data):
+    try:
+        with create_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO users (
+                    user_id, username, password_hash, role, email,
+                    first_name, last_name, full_name, sex, age, class, stream,
+                    address, parent_guardian, contact, profession
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                data['user_id'], data['username'], data['password_hash'], data['role'], data.get('email'),
+                data.get('first_name'), data.get('last_name'), data.get('full_name'), data.get('sex'),
+                data.get('age'), data.get('class'), data.get('stream'), data.get('address'),
+                data.get('parent_guardian'), data.get('contact'), data.get('profession')
+            ))
+            conn.commit()  # ✅ ensure permanent save
+        return True, "✅ User registered successfully!"
+    except sqlite3.IntegrityError as e:
+        return False, f"🚫 Integrity error: {str(e)}"
+    except Exception as e:
+        return False, f"⚠️ Unexpected error: {str(e)}"
 def generate_user_id(role):
     prefix_map = {
         'student': 'STUD',
@@ -923,7 +960,7 @@ def create_sessions_table():
             session_duration INTEGER
         )
         """)
-create_sessions_table()
+# create_sessions_table()
 def insert_session_event(user_id, role, name, event_type, session_duration=None):
     with create_connection() as conn:
         conn.execute("""
@@ -932,28 +969,28 @@ def insert_session_event(user_id, role, name, event_type, session_duration=None)
         """, (user_id, role, name, event_type, session_duration))
 
 
-def insert_user(data):
-    try:
-        with create_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-                INSERT INTO users (
-                    user_id, username, password_hash, role, email,
-                    first_name, last_name, full_name, sex, age, class, stream,
-                    address, parent_guardian, contact, profession
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                data['user_id'], data['username'], data['password_hash'], data['role'], data.get('email'),
-                data.get('first_name'), data.get('last_name'), data.get('full_name'), data.get('sex'),
-                data.get('age'), data.get('class'), data.get('stream'), data.get('address'),
-                data.get('parent_guardian'), data.get('contact'), data.get('profession')
-            ))
-            conn.commit()  # <- make sure changes are saved
-        return True, "✅ User registered successfully!"
-    except sqlite3.IntegrityError as e:
-        return False, f"🚫 Integrity error: {str(e)}"
-    except Exception as e:
-        return False, f"⚠️ Unexpected error: {str(e)}"
+# def insert_user(data):
+#     try:
+#         with create_connection() as conn:
+#             cursor = conn.cursor()
+#             cursor.execute("""
+#                 INSERT INTO users (
+#                     user_id, username, password_hash, role, email,
+#                     first_name, last_name, full_name, sex, age, class, stream,
+#                     address, parent_guardian, contact, profession
+#                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+#             """, (
+#                 data['user_id'], data['username'], data['password_hash'], data['role'], data.get('email'),
+#                 data.get('first_name'), data.get('last_name'), data.get('full_name'), data.get('sex'),
+#                 data.get('age'), data.get('class'), data.get('stream'), data.get('address'),
+#                 data.get('parent_guardian'), data.get('contact'), data.get('profession')
+#             ))
+#             conn.commit()  # <- make sure changes are saved
+#         return True, "✅ User registered successfully!"
+#     except sqlite3.IntegrityError as e:
+#         return False, f"🚫 Integrity error: {str(e)}"
+#     except Exception as e:
+#         return False, f"⚠️ Unexpected error: {str(e)}"
 
 def authenticate_user(username, password):
     conn = create_connection()
@@ -1249,3 +1286,4 @@ def show_signup_dialog():
             st.session_state.show_signup = False
             st.session_state.show_login = True
             st.rerun()
+
