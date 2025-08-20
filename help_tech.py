@@ -4,7 +4,6 @@ from PIL import Image
 import os, base64
 import json
 import time
-from streamlit_autorefresh import st_autorefresh
 from streamlit_javascript import st_javascript
 
 def dislay_tilte():
@@ -158,4 +157,5 @@ def main():
       
 
 if __name__ == "__main__":
+
    main()
