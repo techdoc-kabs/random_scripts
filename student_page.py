@@ -13,7 +13,7 @@ from streamlit_javascript import st_javascript
 import contact_form
 import time
 import pandas as pd
-
+import help_tech
 DB_PATH = "users_db.db"
 # device_width = st_javascript("window.innerWidth", key="menu_device_width")
 def create_connection():
@@ -668,3 +668,4 @@ def main():
         student_menu()
 if __name__  == "__main__":
     main()
+
